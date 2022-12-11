@@ -23,8 +23,19 @@ $router->group(['prefix' => 'v1'], function() use ($router)
 {
     $router->group(['prefix' => 'alumni'], function() use ($router) {
         $router->get('/','AlumniController@index');
-        $router->post('/posts','AlumniController@store');
+        $router->post('posts','AlumniController@store');
     });
+    $router->group(['prefix' => 'kota'],function() use ($router)
+    {
+        $router->get('/','MsKotaController@index');
+        $router->post('posts','MsKotaController@store');
+    });
+    $router->group(['prefix' => 'provinsi'],function() use ($router)
+    {
+        $router->get('/','MsProvinsiController@index');
+        $router->post('posts','MsProvinsiController@store');
+    });
+
 });
 $router->get('mahasiswa', 'AturanCutiController@index');
 // });

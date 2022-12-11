@@ -1,16 +1,16 @@
 <?php
 namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
-class MsKota extends Model
+class MsProvinsi extends Model
 {
-    protected $table = 'ms_kota';
+    protected $table = 'ms_propinsi';
     protected $fillable = [
-        'kodekota',
         'kodepropinsi',
-        'namakota',
+        'namapropinsi',
         't_updateuser',
         't_updateip',
         't_updatetime',
         't_updateact',
+
     ];
 }
