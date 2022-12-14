@@ -33,6 +33,34 @@ class MsUnitController extends Controller
     {
         $validator = Validator::make($request->all(),[
             'namaunit' => 'required',
+            'namasingkat' => 'required',
+            'levels' => 'required',
+            'gelar' => 'required',
+            'programpend' => 'required',
+            'kodekampus' => 'required',
+            'bebanstudi' => 'required',
+            'batasip' => 'required',
+            'prosentasecmax' => 'required',
+            'toeflmin' => 'required',
+            'cutimax' => 'required',
+            'keterangan' => 'required',
+            'urutan' => 'required',
+            'infoleft' => 'required',
+            'inforight' => 'required',
+            'isaktif' => 'required',
+            'nipketua' => 'required',
+            'namauniten' => 'required',
+            'gelaren' => 'required',
+            'noskdikti' => 'required',
+            'tglskdikti' => 'required',
+            'noskbanpt' => 'required',
+            'tglskbanpt' => 'required',
+            'kodeakreditasi' => 'required',
+            'telp' => 'required',
+            'email' => 'required',
+            'kodenim' => 'required',
+            'kodedikti' => 'required',
+            'kodefakultas' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -44,10 +72,10 @@ class MsUnitController extends Controller
             if( is_null($id->first())){
                 $data = 0;
             }else{
-                $data = $id->orderBy('kodeunit','desc')->first()->kodepropinsi;
+                $data = $id->orderBy('kodeunit','desc')->first()->kodeunit;
             }
             MsUnit::create([
-                'kodeunit' => $request->get('kodeunit'),
+                'kodeunit' => $data + 1,
                 'kodeunitparent' => $request->get('kodeunitparent'),
                 'namaunit' => $request->get('namaunit'),
                 'namasingkat' => $request->get('namasingkat'),
@@ -100,7 +128,35 @@ class MsUnitController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(),[
-            'namapropinsi' => 'required',
+            'namaunit' => 'required',
+            'namasingkat' => 'required',
+            'levels' => 'required',
+            'gelar' => 'required',
+            'programpend' => 'required',
+            'kodekampus' => 'required',
+            'bebanstudi' => 'required',
+            'batasip' => 'required',
+            'prosentasecmax' => 'required',
+            'toeflmin' => 'required',
+            'cutimax' => 'required',
+            'keterangan' => 'required',
+            'urutan' => 'required',
+            'infoleft' => 'required',
+            'inforight' => 'required',
+            'isaktif' => 'required',
+            'nipketua' => 'required',
+            'namauniten' => 'required',
+            'gelaren' => 'required',
+            'noskdikti' => 'required',
+            'tglskdikti' => 'required',
+            'noskbanpt' => 'required',
+            'tglskbanpt' => 'required',
+            'kodeakreditasi' => 'required',
+            'telp' => 'required',
+            'email' => 'required',
+            'kodenim' => 'required',
+            'kodedikti' => 'required',
+            'kodefakultas' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -109,8 +165,38 @@ class MsUnitController extends Controller
 
         try {
             MsUnit::where('kodeunit',$id)->update([
+                'kodeunitparent' => $request->get('kodeunitparent'),
                 'namaunit' => $request->get('namaunit'),
-                'updated_at' => Carbon::now(),
+                'namasingkat' => $request->get('namasingkat'),
+                'levels' => $request->get('levels'),
+                'gelar' => $request->get('gelar'),
+                'programpend' => $request->get('programpend'),
+                'kodekampus' => $request->get('kodekampus'),
+                'bebanstudi' => $request->get('bebanstudi'),
+                'batasip' => $request->get('batasip'),
+                'prosentasecmax' => $request->get('prosentasecmax'),
+                'toeflmin' => $request->get('toeflmin'),
+                'cutimax' => $request->get('cutimax'),
+                'keterangan' => $request->get('keterangan'),
+                'urutan' => $request->get('urutan'),
+                'infoleft' => $request->get('infoleft'),
+                'inforight' => $request->get('inforight'),
+                'isaktif' => $request->get('isaktif'),
+                'nipketua' => $request->get('nipketua'),
+                'namauniten' => $request->get('namauniten'),
+                'gelaren' => $request->get('gelaren'),
+                'noskdikti' => $request->get('noskdikti'),
+                'tglskdikti' => $request->get('tglskdikti'),
+                'noskbanpt' => $request->get('noskbanpt'),
+                'tglskbanpt' => $request->get('tglskbanpt'),
+                'kodeakreditasi' => $request->get('kodeakreditasi'),
+                'telp' => $request->get('telp'),
+                'email' => $request->get('email'),
+                'kodenim' => $request->get('kodenim'),
+                'kodedikti' => $request->get('kodedikti'),
+                't_updateuser' => $request->get('user'),
+                't_updateip' => $request->ip(),
+                't_updatetime' => Carbon::now(),
             ]);
 
             return response()->json(
@@ -126,10 +212,15 @@ class MsUnitController extends Controller
         }
     }
 
-    public function delete($id)
+    public function delete($id, $kodeunitparent)
     {
         try {
-            MsUnit::where('kodeunit',$id)->delete();
+            $data_current = MsUnit::where('kodeunitparent',$id)->where('kodeunit',$id);
+            if (count($data_current->get()) > 0) {
+                if ($data_current->delete()) {
+                    MsUnit::where('kodeunit',$id)->orWhere('kodeunitparent',$kodeunitparent)->delete();
+                }
+            }
             return response()->json(
                 [
                     'status' => true,
@@ -142,4 +233,5 @@ class MsUnitController extends Controller
             return response()->json(['status' => false, 'message' => $e->getMessage()]);
         }
     }
+
 }
