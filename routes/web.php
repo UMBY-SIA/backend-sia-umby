@@ -2,6 +2,8 @@
 
 /** @var \Laravel\Lumen\Routing\Router $router */
 
+use Illuminate\Support\Facades\DB;
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -18,3 +20,12 @@ $router->get('/', function () use ($router) {
 });
 
 $router->get('/ak-mahasiswa', 'Akademik\MahasiswaController@get_data');
+$router->group(['prefix' => 'v1'], function() use ($router)
+{
+    $router->group(['prefix' => 'alumni'], function() use ($router) {
+        $router->get('/','AlumniController@index');
+        $router->post('/posts','AlumniController@store');
+    });
+});
+$router->get('mahasiswa', 'AturanCutiController@index');
+// });
