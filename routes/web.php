@@ -78,6 +78,22 @@ $router->group(['prefix' => 'v1'], function() use ($router)
         $router->delete('delete/{id}', 'MsKkniController@delete');
     });
 
+    $router->group(['prefix' => 'lv-jabatan'],function() use ($router)
+    {
+        $router->get('/', 'LvJabatanController@index');
+        $router->post('posts', 'LvJabatanController@store');
+        $router->post('update/{id}', 'LvJabatanController@update');
+        $router->delete('delete/{id}', 'LvJabatanController@delete');
+    });
+
+    $router->group(['prefix' => 'pejabat'],function() use ($router)
+    {
+        $router->get('/', 'MsPejabatController@index');
+        $router->post('posts', 'MsPejabatController@store');
+        $router->post('update/{id}', 'MsPejabatController@update');
+        $router->delete('delete/{id}', 'MsPejabatController@delete');
+    });
+
 
 });
 $router->get('mahasiswa', 'AturanCutiController@index');
