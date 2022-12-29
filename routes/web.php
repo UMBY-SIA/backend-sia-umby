@@ -48,6 +48,62 @@ $router->group(['prefix' => 'v1'], function() use ($router)
         $router->delete('delete/{id}','MsProvinsiController@delete');
     });
 
+    $router->group(['prefix' => 'thnkurikulum'],function() use ($router)
+    {
+        $router->get('/','MsThnKurikulumController@index');
+        $router->post('posts','MsThnKurikulumController@store');
+        $router->post('update/{id}','MsThnKurikulumController@update');
+        $router->delete('delete/{id}','MsThnKurikulumController@delete');
+    });
+
+    $router->group(['prefix' => 'syaratkehadiranujian'],function() use ($router)
+    {
+        $router->get('/','MsSyaratKehadiranUjianController@index');
+        $router->post('posts','MsSyaratKehadiranUjianController@store');
+        $router->post('update/{id}','MsSyaratKehadiranUjianController@update');
+        $router->delete('delete/{id}','MsSyaratKehadiranUjianController@delete');
+    });
+
+    $router->group(['prefix' => 'sumberbeasiswa'],function() use ($router)
+    {
+        $router->get('/','MsSumberBeasiswaController@index');
+        $router->post('posts','MsSumberBeasiswaController@store');
+        $router->post('update/{id}','MsSumberBeasiswaController@update');
+        $router->delete('delete/{id}','MsSumberBeasiswaController@delete');
+    });
+
+    $router->group(['prefix' => 'setting-unit'],function() use ($router)
+    {
+        $router->get('/','MsSettingUnitController@index');
+        $router->post('posts','MsSettingUnitController@store');
+        $router->post('update/{id}','MsSettingUnitController@update');
+        $router->delete('delete/{id}','MsSettingUnitController@delete');
+    });
+
+    $router->group(['prefix' => 'setting-krs-unit'],function() use ($router)
+    {
+        $router->get('/','MsSettingKrsUnitController@index');
+        $router->post('posts','MsSettingKrsUnitController@store');
+        $router->post('update/{id}','MsSettingKrsUnitController@update');
+        $router->delete('delete/{id}','MsSettingKrsUnitController@delete');
+    });
+
+    $router->group(['prefix' => 'setting'],function() use ($router)
+    {
+        $router->get('/','MsSettingController@index');
+        $router->post('posts','MsSettingController@store');
+        $router->post('update/{id}','MsSettingController@update');
+        $router->delete('delete/{id}','MsSettingController@delete');
+    });
+
+    $router->group(['prefix' => 'ruang'],function() use ($router)
+    {
+        $router->get('/','MsRuangController@index');
+        $router->post('posts','MsRuangController@store');
+        $router->post('update/{id}','MsRuangController@update');
+        $router->delete('delete/{id}','MsRuangController@delete');
+    });
+
 });
 $router->get('mahasiswa', 'AturanCutiController@index');
 // });
