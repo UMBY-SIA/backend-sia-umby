@@ -25,13 +25,15 @@ $router->group(['prefix' => 'v1'], function() use ($router)
     $router->group(['prefix' => 'alumni'], function() use ($router) {
         $router->get('/','AlumniController@index');
         $router->post('posts','AlumniController@store');
+        $router->post('update/{id}','AlumniController@update');
+        $router->delete('delete/{id}','AlumniController@delete');
     });
     $router->group(['prefix' => 'unit'],function() use ($router)
     {
         $router->get('/', 'MsUnitController@index');
         $router->post('posts','MsUnitController@store');
         $router->post('update/{id}','MsUnitController@update');
-        $router->delete('delete/{id}', 'MsUnitController@delete');
+        $router->delete('delete/{id}/{kodeunitparent}', 'MsUnitController@delete');
     });
     $router->group(['prefix' => 'kota'],function() use ($router)
     {
@@ -47,6 +49,52 @@ $router->group(['prefix' => 'v1'], function() use ($router)
         $router->post('update/{id}','MsProvinsiController@update');
         $router->delete('delete/{id}','MsProvinsiController@delete');
     });
+    $router->group(['prefix' => 'lokasi-kampus'],function() use ($router)
+    {
+        $router->get('/','LsLokasiKampusController@index');
+        $router->post('posts','LsLokasiKampusController@store');
+        $router->post('update/{id}','LsLokasiKampusController@update');
+        $router->delete('delete/{id}','LsLokasiKampusController@delete');
+    });
+    $router->group(['prefix' => 'gedung'],function() use ($router)
+    {
+        $router->get('/','MsGedungController@index');
+        $router->post('posts','MsGedungController@store');
+        $router->post('update/{id}','MsGedungController@update');
+        $router->delete('delete/{id}','MsGedungController@delete');
+    });
+
+    $router->group(['prefix' => 'pendidikan'],function() use ($router)
+    {
+        $router->get('/', 'LvPendidikanController@index');
+        $router->post('posts','LvPendidikanController@store');
+        $router->post('update/{id}','LvPendidikanController@update');
+        $router->delete('delete/{id}','LvPendidikanController@delete');
+    });
+    $router->group(['prefix' => 'kkni'],function() use ($router)
+    {
+        $router->get('/', 'MsKkniController@index');
+        $router->post('posts', 'MsKkniController@store');
+        $router->post('update/{id}', 'MsKkniController@update');
+        $router->delete('delete/{id}', 'MsKkniController@delete');
+    });
+
+    $router->group(['prefix' => 'lv-jabatan'],function() use ($router)
+    {
+        $router->get('/', 'LvJabatanController@index');
+        $router->post('posts', 'LvJabatanController@store');
+        $router->post('update/{id}', 'LvJabatanController@update');
+        $router->delete('delete/{id}', 'LvJabatanController@delete');
+    });
+
+    $router->group(['prefix' => 'pejabat'],function() use ($router)
+    {
+        $router->get('/', 'MsPejabatController@index');
+        $router->post('posts', 'MsPejabatController@store');
+        $router->post('update/{id}', 'MsPejabatController@update');
+        $router->delete('delete/{id}', 'MsPejabatController@delete');
+    });
+
 
     $router->group(['prefix' => 'thnkurikulum'],function() use ($router)
     {

@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\MsAlumni;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -35,60 +36,63 @@ class AlumniController extends Controller
 
     public function store(Request $request)
     {
-        // $validator = Validator::make($request->all(), [
-        //     "statusnikah" => "qwwq",
-        //     "kodekota" => "",
-        //     "bidangkerja" => "",
-        //     "kodeagama" => "",
-        //     "kodewn" => "",
-        //     "kodeunit" => "",
-        //     "statuskerja" => "",
-        //     "kotaperusahaan" => "",
-        //     "namaperusahaan" => "",
-        //     "alamatperusahaan" => "",
-        //     "telpperusahaan" => "",
-        //     "jenisinstansi" => "",
-        //     "jabatan" => "",
-        //     "pekerjaan" => "",
-        //     "nama" => "",
-        //     "gelardepan" => "",
-        //     "gelarbelakang" => "",
-        //     "sex" => "",
-        //     "tmplahir" => "",
-        //     "tgllahir" => "",
-        //     "goldarah" => "",
-        //     "alamat" => "",
-        //     "kodepos" => "",
-        //     "telp" => "",
-        //     "telp2" => "",
-        //     "hp" => "",
-        //     "hp2" => "",
-        //     "email" => "",
-        //     "email2" => "",
-        //     "noktp" => "",
-        //     "npwp" => "",
-        //     "kelurahan" => "",
-        //     "kecamatan" => "",
-        //     "tinggibadan" => "",
-        //     "beratbadan" => "",
-        //     "cacattubuh" => "",
-        //     "hobi" => "",
-        //     "noskkelbaik" => "",
-        //     "tglskkelbaik" => "",
-        //     "pejabatskkelbaik" => "",
-        //     "nosksehat" => "",
-        //     "tglsksehat" => "",
-        //     "pejabatsksehat" => "",
-        //     "nomorika" => "",
-        //     "nomornimlama" => "",
-        //     "tahunlulus" => "",
-        //     "ipklulus" => "",
-        //     "lamastudi" => "",
-        //     "waktutunggu" => "",
+        $validator = Validator::make($request->all(), [
+            "statusnikah" => "required",
+            "kodekota" => "required",
+            "bidangkerja" => "required",
+            "kodeagama" => "required",
+            "kodewn" => "required",
+            "kodeunit" => "required",
+            "statuskerja" => "required",
+            "kotaperusahaan" => "required",
+            "namaperusahaan" => "required",
+            "alamatperusahaan" => "required",
+            "telpperusahaan" => "required",
+            "jenisinstansi" => "required",
+            "jabatan" => "required",
+            "pekerjaan" => "required",
+            "nama" => "required",
+            "gelardepan" => "required",
+            "gelarbelakang" => "required",
+            "sex" => "required",
+            "tmplahir" => "required",
+            "tgllahir" => "required",
+            "goldarah" => "required",
+            "alamat" => "required",
+            "kodepos" => "required",
+            "telp" => "required",
+            "telp2" => "required",
+            "hp" => "required",
+            "hp2" => "required",
+            "email" => "required",
+            "email2" => "required",
+            "noktp" => "required",
+            "npwp" => "required",
+            "kelurahan" => "required",
+            "kecamatan" => "required",
+            "tinggibadan" => "required",
+            "beratbadan" => "required",
+            "cacattubuh" => "required",
+            "hobi" => "required",
+            "noskkelbaik" => "required",
+            "tglskkelbaik" => "required",
+            "pejabatskkelbaik" => "required",
+            "nosksehat" => "required",
+            "tglsksehat" => "required",
+            "pejabatsksehat" => "required",
+            "nomorika" => "required",
+            "nomornimlama" => "required",
+            "tahunlulus" => "required",
+            "ipklulus" => "required",
+            "lamastudi" => "required",
+            "waktutunggu" => "required",
 
-        // ]);
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['message' => $validator->errors()], Response::HTTP_FORBIDDEN);
+        }
         try {
-            $id = IdGenerator::generate(['table' => 'ms_alumni','field' => 'idalumni', 'length' => 6, 'prefix' =>date('y')]);
+            $id = IdGenerator::generate(['table' => 'ms_alumni','field' => 'idalumni', 'length' => 6, 'prefix' =>date('m')]);
             $add = new MsAlumni;
             $add->idalumni =  $id;
             $add->statusnikah = $request->get('statusnikah');
@@ -141,14 +145,157 @@ class AlumniController extends Controller
             $add->lamastudi = $request->get('lamastudi');
             $add->waktutunggu = $request->get('waktutunggu');
             $add->save();
-
+            return response()->json(
+                [
+                    'status' => true,
+                    'message' => 'Berhasil menambahkan data',
+                ],Response::HTTP_OK);
         } catch (Exception $e) {
             return response()->json(['message' => 'Terjadi kesalahan', 'detail' => [$e->getMessage()]]);
         } catch (QueryException $e) {
             return response()->json(['message' => 'Terjadi kesalahan', 'detail' => $e->getMessage()]);
 
         }
-
-
     }
+    public function update(Request $request,$id)
+    {
+        $validator = Validator::make($request->all(), [
+            "statusnikah" => "required",
+            "kodekota" => "required",
+            "bidangkerja" => "required",
+            "kodeagama" => "required",
+            "kodewn" => "required",
+            "kodeunit" => "required",
+            "statuskerja" => "required",
+            "kotaperusahaan" => "required",
+            "namaperusahaan" => "required",
+            "alamatperusahaan" => "required",
+            "telpperusahaan" => "required",
+            "jenisinstansi" => "required",
+            "jabatan" => "required",
+            "pekerjaan" => "required",
+            "nama" => "required",
+            "gelardepan" => "required",
+            "gelarbelakang" => "required",
+            "sex" => "required",
+            "tmplahir" => "required",
+            "tgllahir" => "required",
+            "goldarah" => "required",
+            "alamat" => "required",
+            "kodepos" => "required",
+            "telp" => "required",
+            "telp2" => "required",
+            "hp" => "required",
+            "hp2" => "required",
+            "email" => "required",
+            "email2" => "required",
+            "noktp" => "required",
+            "npwp" => "required",
+            "kelurahan" => "required",
+            "kecamatan" => "required",
+            "tinggibadan" => "required",
+            "beratbadan" => "required",
+            "cacattubuh" => "required",
+            "hobi" => "required",
+            "noskkelbaik" => "required",
+            "tglskkelbaik" => "required",
+            "pejabatskkelbaik" => "required",
+            "nosksehat" => "required",
+            "tglsksehat" => "required",
+            "pejabatsksehat" => "required",
+            "nomorika" => "required",
+            "nomornimlama" => "required",
+            "tahunlulus" => "required",
+            "ipklulus" => "required",
+            "lamastudi" => "required",
+            "waktutunggu" => "required",
+
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['message' => $validator->errors()], Response::HTTP_FORBIDDEN);
+        }
+        try {
+            MsAlumni::find($id)->update([
+                'statusnikah' => $request->get('statusnikah'),
+                'kodekota' => $request->get('kodekota'),
+                'bidangkerja' => $request->get('bidangkerja'),
+                'kodeagama' => $request->get('kodeagama'),
+                'kodewn' => $request->get('kodewn'),
+                'kodeunit' => $request->get('kodeunit'),
+                'statuskerja' => $request->get('statuskerja'),
+                'kotaperusahaan' => $request->get('kotaperusahaan'),
+                'namaperusahaan' => $request->get('namaperusahaan'),
+                'alamatperusahaan' => $request->get('alamatperusahaan'),
+                'telpperusahaan' => $request->get('telpperusahaan'),
+                'jenisinstansi' => $request->get('jenisinstansi'),
+                'jabatan' => $request->get('jabatan'),
+                'pekerjaan' => $request->get('pekerjaan'),
+                'nama' => $request->get('nama'),
+                'gelardepan' => $request->get('gelardepan'),
+                'gelarbelakang' => $request->get('gelarbelakang'),
+                'sex' => $request->get('sex'),
+                'tmplahir' => $request->get('tmplahir'),
+                'tgllahir' => $request->get('tgllahir'),
+                'goldarah' => $request->get('goldarah'),
+                'alamat' => $request->get('alamat'),
+                'kodepos' => $request->get('kodepos'),
+                'telp' => $request->get('telp'),
+                'telp2' => $request->get('telp2'),
+                'hp' => $request->get('hp'),
+                'hp2' => $request->get('hp2'),
+                'email' => $request->get('email'),
+                'email2' => $request->get('email2'),
+                'noktp' => $request->get('noktp'),
+                'npwp' => $request->get('npwp'),
+                'kelurahan' => $request->get('kelurahan'),
+                'kecamatan' => $request->get('kecamatan'),
+                'tinggibadan' => $request->get('tinggibadan'),
+                'beratbadan' => $request->get('beratbadan'),
+                'cacattubuh' => $request->get('cacattubuh'),
+                'hobi' => $request->get('hobi'),
+                'noskkelbaik' => $request->get('noskkelbaik'),
+                'tglskkelbaik' => $request->get('tglskkelbaik'),
+                'pejabatskkelbaik' => $request->get('pejabatskkelbaik'),
+                'nosksehat' => $request->get('nosksehat'),
+                'tglsksehat' => $request->get('tglsksehat'),
+                'pejabatsksehat' => $request->get('pejabatsksehat'),
+                'nomorika' => $request->get('nomorika'),
+                'nomornimlama' => $request->get('nomornimlama'),
+                'tahunlulus' => $request->get('tahunlulus'),
+                'ipklulus' => $request->get('ipklulus'),
+                'lamastudi' => $request->get('lamastudi'),
+                'waktutunggu' => $request->get('waktutunggu'),
+                't_updateuser' => $request->get('user'),
+                't_updateip' => $request->ip(),
+                't_updatetime' => Carbon::now(),
+            ]);
+            return response()->json(
+                [
+                    'status' => true,
+                    'message' => 'Berhasil mengganti data',
+                ],Response::HTTP_OK);
+        } catch (Exception $e) {
+            return response()->json(['message' => 'Terjadi kesalahan', 'detail' => [$e->getMessage()]]);
+        } catch (QueryException $e) {
+            return response()->json(['message' => 'Terjadi kesalahan', 'detail' => $e->getMessage()]);
+        }
+    }
+
+    public function delete($id)
+    {
+        try {
+            MsAlumni::where('idalumni',$id)->delete();
+            return response()->json(
+                [
+                    'status' => true,
+                    'message' => 'Berhasil menghapus data',
+                ],Response::HTTP_OK);
+
+        } catch (Exception $th) {
+            return response()->json(['status' => false, 'message' => $th->getMessage()]);
+        } catch (QueryException $e){
+            return response()->json(['status' => false, 'message' => $e->getMessage()]);
+        }
+    }
+
 }
