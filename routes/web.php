@@ -19,7 +19,6 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
-$router->get('/ak-mahasiswa', 'Akademik\MahasiswaController@get_data');
 $router->group(['prefix' => 'v1'], function() use ($router)
 {
     $router->group(['prefix' => 'alumni'], function() use ($router) {
