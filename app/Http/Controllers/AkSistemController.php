@@ -1,7 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
-use App\Models\MsKota;
+use App\Models\AkSistem;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\QueryException;
@@ -9,20 +9,17 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
 
-class MsKotaController extends Controller
+class AkSistemController extends Controller
 {
     public function index()
     {
-        $data = new MsKota;
+        $data = new AkSistem;
         if (count($data->get()) > 0) {
             return response()->json([
                 'status' => true,
                 'message' => 'Berhasil menampilkan data',
-                'data' => $data->select('ms_kota.kodekota',
-                                'ms_kota.namakota',
-                                'ms_propinsi.kodepropinsi',
-                                'ms_propinsi.namapropinsi')
-                                ->join('ms_propinsi','ms_propinsi.kodepropinsi','ms_kota.kodepropinsi')->get()],Response::HTTP_OK);
+                'data' => $data->all(),
+            ], Response::HTTP_OK);
         }else{
             return response()->json([
                 'status' => false,
@@ -34,26 +31,27 @@ class MsKotaController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(),[
-            'kodepropinsi' => 'required',
-            'namakota' => 'required',
+            'namasistem' => 'required',
+            'tipeprogram' => 'required',
+            'statusprogram' => 'required',
         ]);
 
         if ($validator->fails()) {
             return response()->json(['message' => $validator->errors()], Response::HTTP_FORBIDDEN);
         }
-
-        try {
-            $id = new MsKota;
+        try{
+            $id = new AkSistem;
             if( is_null($id->first())){
                 $data = 0;
             }else{
-                $data = $id->orderBy('kodekota','desc')->first()->kodekota;
+                $data = $id->orderBy('sistemkuliah','desc')->first()->sistemkuliah;
             }
-            $kota = new MsKota;
-            $kota->kodekota = $data + 1;
-            $kota->kodepropinsi = $request->get('kodepropinsi');
-            $kota->namakota = $request->get('namakota');
-            $kota->save();
+            $sistem = new AkSistem;
+            $sistem->sistemkuliah = $data + 1;
+            $sistem->namasistem = $request->get('namasistem');
+            $sistem->tipeprogram = $request->get('tipeprogram');
+            $sistem->statusprogram = $request->get('statusprogram');
+            $sistem->save();
             return response()->json(
                 [
                     'status' => true,
@@ -70,8 +68,9 @@ class MsKotaController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(),[
-            'kodepropinsi' => 'required',
-            'namakota' => 'required',
+            'namasistem' => 'required',
+            'tipeprogram' => 'required',
+            'statusprogram' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -79,13 +78,15 @@ class MsKotaController extends Controller
         }
 
         try {
-            MsKota::where('kodekota', $id)->update([
-                'kodepropinsi' => $request->get('kodepropinsi'),
-                'namakota' => $request->get('namakota'),
+            AkSistem::where('sistemkuliah',$id)->update([
+                'namasistem' => $request->get('namasistem'),
+                'tipeprogram' => $request->get('tipeprogram'),
+                'statusprogram' => $request->get('statusprogram'),
                 't_updateuser' => $request->get('user'),
                 't_updateip' => $request->ip(),
                 't_updatetime' => Carbon::now(),
             ]);
+
             return response()->json(
                 [
                     'status' => true,
@@ -102,7 +103,7 @@ class MsKotaController extends Controller
     public function delete($id)
     {
         try {
-            MsKota::where('kodekota',$id)->delete();
+            AkSistem::where('sistemkuliah',$id)->delete();
             return response()->json(
                 [
                     'status' => true,

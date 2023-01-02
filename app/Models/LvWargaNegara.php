@@ -8,4 +8,8 @@ class LvWargaNegara extends Model
     public $autoincrement = false;
     public $incrementing  = false;
     protected $primaryKey = "kodewn";
+    protected $fillable = [
+        'kodewn',
+        'namawn'
+    ];
 }

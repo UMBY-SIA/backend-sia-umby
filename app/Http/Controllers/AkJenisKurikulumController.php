@@ -1,28 +1,25 @@
 <?php
 namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
-use App\Models\MsKota;
-use Carbon\Carbon;
+use App\Models\AkJenisKurikulum;
 use Exception;
+use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
 
-class MsKotaController extends Controller
+class AkJenisKurikulumController extends Controller
 {
     public function index()
     {
-        $data = new MsKota;
+        $data = new AkJenisKurikulum;
         if (count($data->get()) > 0) {
             return response()->json([
                 'status' => true,
                 'message' => 'Berhasil menampilkan data',
-                'data' => $data->select('ms_kota.kodekota',
-                                'ms_kota.namakota',
-                                'ms_propinsi.kodepropinsi',
-                                'ms_propinsi.namapropinsi')
-                                ->join('ms_propinsi','ms_propinsi.kodepropinsi','ms_kota.kodepropinsi')->get()],Response::HTTP_OK);
+                'data' => $data->all(),
+            ], Response::HTTP_OK);
         }else{
             return response()->json([
                 'status' => false,
@@ -34,8 +31,14 @@ class MsKotaController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(),[
-            'kodepropinsi' => 'required',
-            'namakota' => 'required',
+            'kodeunit' => 'required',
+            'thnkurikulum' => 'required',
+            'namakurikulum' => 'required',
+            'tglberlaku' => 'required',
+            'is_aktif' => 'required',
+            'pendidikanasal' => 'required',
+            'pendidikantempuh' => 'required',
+            'sistemkuliah' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -43,17 +46,19 @@ class MsKotaController extends Controller
         }
 
         try {
-            $id = new MsKota;
-            if( is_null($id->first())){
-                $data = 0;
-            }else{
-                $data = $id->orderBy('kodekota','desc')->first()->kodekota;
-            }
-            $kota = new MsKota;
-            $kota->kodekota = $data + 1;
-            $kota->kodepropinsi = $request->get('kodepropinsi');
-            $kota->namakota = $request->get('namakota');
-            $kota->save();
+            $id = IdGenerator::generate(['table' => 'ak_jeniskurikulum','field' => 'kodekurikulum','length' => 10, 'prefix' =>date('m')]);
+
+            $JenisKurikulum = new AkJenisKurikulum;
+            $JenisKurikulum->kodekurikulum = $id;
+            $JenisKurikulum->kodeunit = $request->get('kodeunit');
+            $JenisKurikulum->thnkurikulum = $request->get('thnkurikulum');
+            $JenisKurikulum->namakurikulum = $request->get('namakurikulum');
+            $JenisKurikulum->tglberlaku = $request->get('tglberlaku');
+            $JenisKurikulum->is_aktif = $request->get('is_aktif');
+            $JenisKurikulum->pendidikanasal = $request->get('pendidikanasal');
+            $JenisKurikulum->pendidikantempuh = $request->get('pendidikantempuh');
+            $JenisKurikulum->sistemkuliah = $request->get('sistemkuliah');
+            $JenisKurikulum->save();
             return response()->json(
                 [
                     'status' => true,
@@ -70,8 +75,14 @@ class MsKotaController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(),[
-            'kodepropinsi' => 'required',
-            'namakota' => 'required',
+            'kodeunit' => 'required',
+            'thnkurikulum' => 'required',
+            'namakurikulum' => 'required',
+            'tglberlaku' => 'required',
+            'is_aktif' => 'required',
+            'pendidikanasal' => 'required',
+            'pendidikantempuh' => 'required',
+            'sistemkuliah' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -79,13 +90,17 @@ class MsKotaController extends Controller
         }
 
         try {
-            MsKota::where('kodekota', $id)->update([
-                'kodepropinsi' => $request->get('kodepropinsi'),
-                'namakota' => $request->get('namakota'),
-                't_updateuser' => $request->get('user'),
-                't_updateip' => $request->ip(),
-                't_updatetime' => Carbon::now(),
+            AkJenisKurikulum::where('kodekurikulum',$id)->update([
+                'kodeunit' => $request->get('kodeunit'),
+                'thnkurikulum' => $request->get('thnkurikulum'),
+                'namakurikulum' => $request->get('namakurikulum'),
+                'tglberlaku' => $request->get('tglberlaku'),
+                'is_aktif' => $request->get('is_aktif'),
+                'pendidikanasal' => $request->get('pendidikanasal'),
+                'pendidikantempuh' => $request->get('pendidikantempuh'),
+                'sistemkuliah' => $request->get('sistemkuliah'),
             ]);
+
             return response()->json(
                 [
                     'status' => true,
@@ -102,7 +117,7 @@ class MsKotaController extends Controller
     public function delete($id)
     {
         try {
-            MsKota::where('kodekota',$id)->delete();
+            AkJenisKurikulum::where('kodekurikulum',$id)->delete();
             return response()->json(
                 [
                     'status' => true,

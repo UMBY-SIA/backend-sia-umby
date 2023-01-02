@@ -1,28 +1,24 @@
 <?php
 namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
-use App\Models\MsKota;
-use Carbon\Carbon;
+use App\Models\StatusNikah;
 use Exception;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
 
-class MsKotaController extends Controller
+class LvStatusNikahController extends Controller
 {
     public function index()
     {
-        $data = new MsKota;
+        $data = new StatusNikah;
         if (count($data->get()) > 0) {
             return response()->json([
                 'status' => true,
                 'message' => 'Berhasil menampilkan data',
-                'data' => $data->select('ms_kota.kodekota',
-                                'ms_kota.namakota',
-                                'ms_propinsi.kodepropinsi',
-                                'ms_propinsi.namapropinsi')
-                                ->join('ms_propinsi','ms_propinsi.kodepropinsi','ms_kota.kodepropinsi')->get()],Response::HTTP_OK);
+                'data' => $data->all(),
+            ], Response::HTTP_OK);
         }else{
             return response()->json([
                 'status' => false,
@@ -34,64 +30,54 @@ class MsKotaController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(),[
-            'kodepropinsi' => 'required',
-            'namakota' => 'required',
+            'namastatus' => 'required'
         ]);
-
         if ($validator->fails()) {
-            return response()->json(['message' => $validator->errors()], Response::HTTP_FORBIDDEN);
+            return response()->json([
+                'status' => false,
+                'message' => $validator->errors()], Response::HTTP_FORBIDDEN);
         }
-
         try {
-            $id = new MsKota;
+            $id = new StatusNikah;
             if( is_null($id->first())){
                 $data = 0;
             }else{
-                $data = $id->orderBy('kodekota','desc')->first()->kodekota;
+                $data = $id->orderBy('statusnikah','desc')->first()->statusnikah;
             }
-            $kota = new MsKota;
-            $kota->kodekota = $data + 1;
-            $kota->kodepropinsi = $request->get('kodepropinsi');
-            $kota->namakota = $request->get('namakota');
-            $kota->save();
+            $lvStatusNikah = new StatusNikah;
+            $lvStatusNikah->statusnikah = $data + 1;
+            $lvStatusNikah->namastatus = $request->get('namastatus');
+            $lvStatusNikah->save();
             return response()->json(
                 [
                     'status' => true,
                     'message' => 'Berhasil menambahkan data',
                 ],Response::HTTP_OK);
-
         } catch (Exception $th) {
             return response()->json(['status' => false, 'message' => $th->getMessage()]);
         } catch (QueryException $e){
             return response()->json(['status' => false, 'message' => $e->getMessage()]);
         }
     }
-
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(),[
-            'kodepropinsi' => 'required',
-            'namakota' => 'required',
+            'namastatus' => 'required|max:50',
         ]);
-
         if ($validator->fails()) {
-            return response()->json(['message' => $validator->errors()], Response::HTTP_FORBIDDEN);
+            return response()->json([
+                'status' => false,
+                'message' => $validator->errors()], Response::HTTP_FORBIDDEN);
         }
-
         try {
-            MsKota::where('kodekota', $id)->update([
-                'kodepropinsi' => $request->get('kodepropinsi'),
-                'namakota' => $request->get('namakota'),
-                't_updateuser' => $request->get('user'),
-                't_updateip' => $request->ip(),
-                't_updatetime' => Carbon::now(),
+            StatusNikah::where('statusnikah',$id)->update([
+                'namastatus' => $request->get('namastatus'),
             ]);
             return response()->json(
                 [
                     'status' => true,
                     'message' => 'Berhasil mengganti data',
                 ],Response::HTTP_OK);
-
         } catch (Exception $th) {
             return response()->json(['status' => false, 'message' => $th->getMessage()]);
         } catch (QueryException $e){
@@ -102,13 +88,12 @@ class MsKotaController extends Controller
     public function delete($id)
     {
         try {
-            MsKota::where('kodekota',$id)->delete();
+            StatusNikah::where('statusnikah',$id)->delete();
             return response()->json(
                 [
                     'status' => true,
                     'message' => 'Berhasil menghapus data',
                 ],Response::HTTP_OK);
-
         } catch (Exception $th) {
             return response()->json(['status' => false, 'message' => $th->getMessage()]);
         } catch (QueryException $e){
