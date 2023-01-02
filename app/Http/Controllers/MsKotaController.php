@@ -4,10 +4,8 @@ use App\Http\Controllers\Controller;
 use App\Models\MsKota;
 use Carbon\Carbon;
 use Exception;
-use Illuminate\Auth\Events\Validated;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
 
 class MsKotaController extends Controller
@@ -23,8 +21,7 @@ class MsKotaController extends Controller
                                 'ms_kota.namakota',
                                 'ms_propinsi.kodepropinsi',
                                 'ms_propinsi.namapropinsi')
-                                ->join('ms_propinsi','ms_propinsi.kodepropinsi','ms_kota.kodepropinsi')->paginate(10),
-            ], Response::HTTP_OK);
+                                ->join('ms_propinsi','ms_propinsi.kodepropinsi','ms_kota.kodepropinsi')->get()],Response::HTTP_OK);
         }else{
             return response()->json([
                 'status' => false,

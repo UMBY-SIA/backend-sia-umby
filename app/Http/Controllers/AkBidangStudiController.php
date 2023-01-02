@@ -1,19 +1,21 @@
 <?php
 namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
-use App\Models\MsPeriodeDaftar;
+use App\Models\AkBidangStudi;
+use App\Models\MsJabatan;
 use Carbon\Carbon;
 use Exception;
+use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Validator;
 
-class MsPeriodeDaftarController extends Controller
+class AkBidangStudiController extends Controller
 {
     public function index()
     {
-        $data = new MsPeriodeDaftar;
+        $data = new AkBidangStudi;
         if (count($data->get()) > 0) {
             return response()->json([
                 'status' => true,
@@ -31,7 +33,9 @@ class MsPeriodeDaftarController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(),[
-            'periodedaftar' => 'required',
+            'kodeunit' => 'required',
+            'namabs' => 'required',
+            'namabsen' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -39,9 +43,14 @@ class MsPeriodeDaftarController extends Controller
         }
 
         try {
-            $periodeDaftar = new MsPeriodeDaftar;
-            $periodeDaftar->periodedaftar = $request->get('periodedaftar');
-            $periodeDaftar->save();
+            $id = IdGenerator::generate(['table' => 'ak_bidangstudi','field' => 'kodebs','length' => 5, 'prefix' =>date('m')]);
+
+            $bidangStudi = new AkBidangStudi;
+            $bidangStudi->kodebs = $id;
+            $bidangStudi->kodeunit = $request->get('kodeunit');
+            $bidangStudi->namabs = $request->get('namabs');
+            $bidangStudi->namabsen = $request->get('namabsen');
+            $bidangStudi->save();
             return response()->json(
                 [
                     'status' => true,
@@ -58,7 +67,9 @@ class MsPeriodeDaftarController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(),[
-            'periodedaftar' => 'required|unique:ms_periodedaftar,periodedaftar',
+            'kodeunit' => 'required',
+            'namabs' => 'required',
+            'namabsen' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -66,8 +77,9 @@ class MsPeriodeDaftarController extends Controller
         }
 
         try {
-            MsPeriodeDaftar::where('periodedaftar',$id)->update([
-                'periodedaftar' => $request->get('periodedaftar'),
+            AkBidangStudi::where('kodebs',$id)->update([
+                'namabs' => $request->get('namabs'),
+                'namabsen' => $request->get('namabsen'),
                 't_updateuser' => $request->get('user'),
                 't_updateip' => $request->ip(),
                 't_updatetime' => Carbon::now(),
@@ -89,7 +101,7 @@ class MsPeriodeDaftarController extends Controller
     public function delete($id)
     {
         try {
-            MsPeriodeDaftar::where('periodedaftar',$id)->delete();
+            AkBidangStudi::where('kodebs',$id)->delete();
             return response()->json(
                 [
                     'status' => true,

@@ -183,6 +183,22 @@ $router->group(['prefix' => 'v1'], function() use ($router)
         $router->delete('delete/{id}','MsProgramPendController@delete');
     });
 
+    $router->group(['prefix' => 'pekerjaan'],function() use ($router)
+    {
+        $router->get('/','LvPekerjaanController@index');
+        $router->post('posts','LvPekerjaanController@store');
+        $router->post('update/{id}','LvPekerjaanController@update');
+        $router->delete('delete/{id}','LvPekerjaanController@delete');
+    });
+
+    $router->group(['prefix' => 'bidang-studi'],function() use ($router)
+    {
+        $router->get('/','AkBidangStudiController@index');
+        $router->post('posts','AkBidangStudiController@store');
+        $router->post('update/{id}','AkBidangStudiController@update');
+        $router->delete('delete/{id}','AkBidangStudiController@delete');
+    });
+
 });
 $router->get('mahasiswa', 'AturanCutiController@index');
 // });

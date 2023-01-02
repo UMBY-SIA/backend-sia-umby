@@ -6,7 +6,7 @@ use Exception;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Validator;
 
 class LvJabatanController extends Controller

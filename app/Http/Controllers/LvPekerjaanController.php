@@ -1,19 +1,19 @@
 <?php
 namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
-use App\Models\MsPeriodeDaftar;
-use Carbon\Carbon;
+use App\Models\LvPekerjaan;
 use Exception;
+use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Validator;
 
-class MsPeriodeDaftarController extends Controller
+class LvPekerjaanController extends Controller
 {
     public function index()
     {
-        $data = new MsPeriodeDaftar;
+        $data = new LvPekerjaan;
         if (count($data->get()) > 0) {
             return response()->json([
                 'status' => true,
@@ -31,54 +31,49 @@ class MsPeriodeDaftarController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(),[
-            'periodedaftar' => 'required',
+            'namapekerjaan' => 'required|max:50'
         ]);
-
         if ($validator->fails()) {
-            return response()->json(['message' => $validator->errors()], Response::HTTP_FORBIDDEN);
+            return response()->json([
+                'status' => false,
+                'message' => $validator->errors()], Response::HTTP_FORBIDDEN);
         }
-
         try {
-            $periodeDaftar = new MsPeriodeDaftar;
-            $periodeDaftar->periodedaftar = $request->get('periodedaftar');
-            $periodeDaftar->save();
+            $id = IdGenerator::generate(['table' => 'lv_pekerjaan','field' => 'kodepekerjaan','length' => 5, 'prefix' =>date('m')]);
+            $lvPekerjaan = new LvPekerjaan;
+            $lvPekerjaan->kodepekerjaan = $id;
+            $lvPekerjaan->namapekerjaan = $request->get('namapekerjaan');
+            $lvPekerjaan->save();
             return response()->json(
                 [
                     'status' => true,
                     'message' => 'Berhasil menambahkan data',
                 ],Response::HTTP_OK);
-
         } catch (Exception $th) {
             return response()->json(['status' => false, 'message' => $th->getMessage()]);
         } catch (QueryException $e){
             return response()->json(['status' => false, 'message' => $e->getMessage()]);
         }
     }
-
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(),[
-            'periodedaftar' => 'required|unique:ms_periodedaftar,periodedaftar',
+            'namapekerjaan' => 'required|max:50',
         ]);
-
         if ($validator->fails()) {
-            return response()->json(['message' => $validator->errors()], Response::HTTP_FORBIDDEN);
+            return response()->json([
+                'status' => false,
+                'message' => $validator->errors()], Response::HTTP_FORBIDDEN);
         }
-
         try {
-            MsPeriodeDaftar::where('periodedaftar',$id)->update([
-                'periodedaftar' => $request->get('periodedaftar'),
-                't_updateuser' => $request->get('user'),
-                't_updateip' => $request->ip(),
-                't_updatetime' => Carbon::now(),
+            LvPekerjaan::where('kodepekerjaan',$id)->update([
+                'namapekerjaan' => $request->get('namapekerjaan'),
             ]);
-
             return response()->json(
                 [
                     'status' => true,
                     'message' => 'Berhasil mengganti data',
                 ],Response::HTTP_OK);
-
         } catch (Exception $th) {
             return response()->json(['status' => false, 'message' => $th->getMessage()]);
         } catch (QueryException $e){
@@ -89,13 +84,12 @@ class MsPeriodeDaftarController extends Controller
     public function delete($id)
     {
         try {
-            MsPeriodeDaftar::where('periodedaftar',$id)->delete();
+            LvPekerjaan::where('kodepekerjaan',$id)->delete();
             return response()->json(
                 [
                     'status' => true,
                     'message' => 'Berhasil menghapus data',
                 ],Response::HTTP_OK);
-
         } catch (Exception $th) {
             return response()->json(['status' => false, 'message' => $th->getMessage()]);
         } catch (QueryException $e){

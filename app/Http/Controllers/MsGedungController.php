@@ -6,8 +6,9 @@ use Exception;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Validator;
+
 
 class MsGedungController extends Controller
 {
@@ -18,7 +19,7 @@ class MsGedungController extends Controller
             return response()->json([
                 'status' => true,
                 'message' => 'Berhasil menampilkan data',
-                'data' => $data->paginate(10),
+                'data' => $data->all(),
             ], Response::HTTP_OK);
         }else{
             return response()->json([

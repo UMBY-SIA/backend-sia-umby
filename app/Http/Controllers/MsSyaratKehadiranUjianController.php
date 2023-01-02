@@ -6,7 +6,7 @@ use App\Models\MsSyaratKehadiranUjian;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\QueryException;
-use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Validator;
 
 class MsSyaratKehadiranUjianController extends Controller
@@ -18,7 +18,7 @@ class MsSyaratKehadiranUjianController extends Controller
             return response()->json([
                 'status' => true,
                 'message' => 'Berhasil menampilkan data',
-                'data' => $data->paginate(10),
+                'data' => $data->all(),
             ], Response::HTTP_OK);
         }else{
             return response()->json([
