@@ -151,6 +151,38 @@ $router->group(['prefix' => 'v1'], function() use ($router)
         $router->delete('delete/{id}','MsRuangController@delete');
     });
 
+    $router->group(['prefix' => 'pengalaman'],function() use ($router)
+    {
+        $router->get('/','MsPengalamanController@index');
+        $router->post('posts','MsPengalamanController@store');
+        $router->post('update/{id}','MsPengalamanController@update');
+        $router->delete('delete/{id}','MsPengalamanController@delete');
+    });
+
+    $router->group(['prefix' => 'periode'],function() use ($router)
+    {
+        $router->get('/','MsPeriodeController@index');
+        $router->post('posts','MsPeriodeController@store');
+        $router->post('update/{id}','MsPeriodeController@update');
+        $router->delete('delete/{id}','MsPeriodeController@delete');
+    });
+
+    $router->group(['prefix' => 'periode-daftar'],function() use ($router)
+    {
+        $router->get('/','MsPeriodeDaftarController@index');
+        $router->post('posts','MsPeriodeDaftarController@store');
+        $router->post('update/{id}','MsPeriodeDaftarController@update');
+        $router->delete('delete/{id}','MsPeriodeDaftarController@delete');
+    });
+
+    $router->group(['prefix' => 'program-pend'],function() use ($router)
+    {
+        $router->get('/','MsProgramPendController@index');
+        $router->post('posts','MsProgramPendController@store');
+        $router->post('update/{id}','MsProgramPendController@update');
+        $router->delete('delete/{id}','MsProgramPendController@delete');
+    });
+
 });
 $router->get('mahasiswa', 'AturanCutiController@index');
 // });
