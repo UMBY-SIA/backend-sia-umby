@@ -38,12 +38,6 @@ class MsSumberBeasiswaController extends Controller
         }
 
         try {
-            $id = new MsSumberBeasiswa;
-            if( is_null($id->first())){
-                $data = 0;
-            }else{
-                $data = $id->orderBy('kodesumber','desc')->first()->kodesumber;
-            }
             $data = new MsSumberBeasiswa;
             $data->kodesumber = $request->get('kodesumber');
             $data->namasumber = $request->get('namasumber');
@@ -71,17 +65,8 @@ class MsSumberBeasiswaController extends Controller
 
     public function update(Request $request, $id)
     {
-        $validator = Validator::make($request->all(),[
-            'kodesumber' => 'required',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['message' => $validator->errors()], Response::HTTP_FORBIDDEN);
-        }
-
         try {
             MsSumberBeasiswa::where('kodesumber',$id)->update([
-                'kodesumber' => $request->get('kodesumber'),
                 'namasumber' => $request->get('namasumber'),
                 'alamat' => $request->get('alamat'),
                 'telp4' => $request->get('telp4'),

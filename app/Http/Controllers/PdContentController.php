@@ -2,18 +2,17 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\MsThnKurikulum;
+use App\Models\PdContent;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
-
-class MsThnKurikulumController extends Controller
+class PdContentController extends Controller
 {
     public function index()
     {
-        $data = new MsThnKurikulum;
+        $data = new PdContent;
         if (count($data->get()) > 0) {
             return response()->json([
                 'status' => true,
@@ -31,7 +30,8 @@ class MsThnKurikulumController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(),[
-            'thnkurikulum' => 'required',
+            'kodecontent' => 'required',
+            'menu' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -39,9 +39,13 @@ class MsThnKurikulumController extends Controller
         }
 
         try {
-            $data = new MsSyaratKehadiranUjian;
-            $data->thnkurikulum = $request->get('thnkurikulum');
-            $data->save();
+            $data_sv = new PdContent;
+            $data_sv->kodecontent = $request->get('kodecontent');
+            $data_sv->menu = $request->get('menu');
+            $data_sv->sistemkuliah = $request->get('sistemkuliah');
+            $data_sv->judul = $request->get('judul');
+            $data_sv->isi = $request->get('isi');
+            $data_sv->save();
             return response()->json(
                 [
                     'status' => true,
@@ -58,7 +62,7 @@ class MsThnKurikulumController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(),[
-            'thnkurikulum' => 'required',
+            'menu' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -66,8 +70,11 @@ class MsThnKurikulumController extends Controller
         }
 
         try {
-            MsThnKurikulum::where('thnkurikulum',$id)->update([
-                'thnkurikulum' => $request->get('thnkurikulum'),
+            PdContent::where('kodecontent',$id)->update([
+                'menu' => $request->get('menu'),
+                'sistemkuliah' => $request->get('sistemkuliah'),
+                'judul' => $request->get('judul'),
+                'isi' => $request->get('isi'),
                 't_updateuser' => $request->get('user'),
                 't_updateip' => $request->ip(),
                 't_updatetime' => Carbon::now(),
@@ -89,7 +96,7 @@ class MsThnKurikulumController extends Controller
     public function delete($id)
     {
         try {
-            MsThnKurikulum::where('thnkurikulum',$id)->delete();
+            PdContent::where('kodecontent',$id)->delete();
             return response()->json(
                 [
                     'status' => true,

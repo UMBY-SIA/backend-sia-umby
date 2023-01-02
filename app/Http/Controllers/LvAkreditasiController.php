@@ -2,18 +2,17 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\MsThnKurikulum;
+use App\Models\LvAkreditasi;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
-
-class MsThnKurikulumController extends Controller
+class LvAkreditasiController extends Controller
 {
     public function index()
     {
-        $data = new MsThnKurikulum;
+        $data = new LvAkreditasi;
         if (count($data->get()) > 0) {
             return response()->json([
                 'status' => true,
@@ -31,7 +30,7 @@ class MsThnKurikulumController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(),[
-            'thnkurikulum' => 'required',
+            'kodeakreditasi' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -39,8 +38,10 @@ class MsThnKurikulumController extends Controller
         }
 
         try {
-            $data = new MsSyaratKehadiranUjian;
-            $data->thnkurikulum = $request->get('thnkurikulum');
+            $data = new LvAkreditasi;
+            $data->kodeakreditasi = $request->get('kodeakreditasi');
+            $data->keterangansem = $request->get('keterangansem');
+            $data->keterangansemen = $request->get('keterangansemen');
             $data->save();
             return response()->json(
                 [
@@ -57,20 +58,10 @@ class MsThnKurikulumController extends Controller
 
     public function update(Request $request, $id)
     {
-        $validator = Validator::make($request->all(),[
-            'thnkurikulum' => 'required',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['message' => $validator->errors()], Response::HTTP_FORBIDDEN);
-        }
-
         try {
-            MsThnKurikulum::where('thnkurikulum',$id)->update([
-                'thnkurikulum' => $request->get('thnkurikulum'),
-                't_updateuser' => $request->get('user'),
-                't_updateip' => $request->ip(),
-                't_updatetime' => Carbon::now(),
+            LvAkreditasi::where('kodeakreditasi',$id)->update([
+                'keterangansem' => $request->get('keterangansem'),
+                'keterangansemen' => $request->get('keterangansemen'),
             ]);
 
             return response()->json(
@@ -89,7 +80,7 @@ class MsThnKurikulumController extends Controller
     public function delete($id)
     {
         try {
-            MsThnKurikulum::where('thnkurikulum',$id)->delete();
+            LvAkreditasi::where('kodeakreditasi',$id)->delete();
             return response()->json(
                 [
                     'status' => true,

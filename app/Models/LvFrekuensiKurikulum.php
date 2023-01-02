@@ -1,15 +1,15 @@
 <?php
 namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
-class LvAgama extends Model
+class LvFrekuensiKurikulum extends Model
 {
-    protected $table = 'lv_agama';
+    protected $table = 'lv_frekuensikurikulum';
     public $timestamps = false;
     public $autoincrement = false;
     public $incrementing  = false;
-    protected $primaryKey = "kodeagama";
+    protected $primaryKey = "frekuensikurikulum";
     protected $fillable = [
-        'kodeagama',
-        'namaagama',
+        'frekuensikurikulum',
+        'keterangansem',
     ];
 }

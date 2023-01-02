@@ -2,18 +2,17 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\MsThnKurikulum;
+use App\Models\PdGelombangDaftar;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
-
-class MsThnKurikulumController extends Controller
+class PdGelombangDaftarController extends Controller
 {
     public function index()
     {
-        $data = new MsThnKurikulum;
+        $data = new PdGelombangDaftar;
         if (count($data->get()) > 0) {
             return response()->json([
                 'status' => true,
@@ -31,7 +30,9 @@ class MsThnKurikulumController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(),[
-            'thnkurikulum' => 'required',
+            'jalurpenerimaan' => 'required',
+            'kodegelombang' => 'required',
+            'periodedaftar' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -39,9 +40,19 @@ class MsThnKurikulumController extends Controller
         }
 
         try {
-            $data = new MsSyaratKehadiranUjian;
-            $data->thnkurikulum = $request->get('thnkurikulum');
-            $data->save();
+            $id = new PdGelombangDaftar;
+            if( is_null($id->first())){
+                $data = 0;
+            }else{
+                $data = $id->orderBy('idsetting','desc')->first()->idsetting;
+            }
+            $data_sv = new PdGelombangDaftar;
+            $data_sv->idgelombang = $data + 1;
+            $data_sv->jalurpenerimaan = $request->get('jalurpenerimaan');
+            $data_sv->kodegelombang = $request->get('kodegelombang');
+            $data_sv->periodedaftar = $request->get('periodedaftar');
+            $data_sv->pengumuman = $request->get('pengumuman');
+            $data_sv->save();
             return response()->json(
                 [
                     'status' => true,
@@ -58,7 +69,7 @@ class MsThnKurikulumController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(),[
-            'thnkurikulum' => 'required',
+            'menu' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -66,8 +77,11 @@ class MsThnKurikulumController extends Controller
         }
 
         try {
-            MsThnKurikulum::where('thnkurikulum',$id)->update([
-                'thnkurikulum' => $request->get('thnkurikulum'),
+            PdGelombangDaftar::where('kodecontent',$id)->update([
+                'menu' => $request->get('menu'),
+                'sistemkuliah' => $request->get('sistemkuliah'),
+                'judul' => $request->get('judul'),
+                'isi' => $request->get('isi'),
                 't_updateuser' => $request->get('user'),
                 't_updateip' => $request->ip(),
                 't_updatetime' => Carbon::now(),
@@ -89,7 +103,7 @@ class MsThnKurikulumController extends Controller
     public function delete($id)
     {
         try {
-            MsThnKurikulum::where('thnkurikulum',$id)->delete();
+            PdGelombangDaftar::where('kodecontent',$id)->delete();
             return response()->json(
                 [
                     'status' => true,

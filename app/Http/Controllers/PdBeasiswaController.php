@@ -2,18 +2,17 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\MsThnKurikulum;
+use App\Models\PdBeasiswa;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
-
-class MsThnKurikulumController extends Controller
+class PdBeasiswaController extends Controller
 {
     public function index()
     {
-        $data = new MsThnKurikulum;
+        $data = new PdBeasiswa;
         if (count($data->get()) > 0) {
             return response()->json([
                 'status' => true,
@@ -31,7 +30,9 @@ class MsThnKurikulumController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(),[
-            'thnkurikulum' => 'required',
+            'jalurpenerimaan' => 'required',
+            'sistemkuliah' => 'required',
+            'periode' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -39,9 +40,19 @@ class MsThnKurikulumController extends Controller
         }
 
         try {
-            $data = new MsSyaratKehadiranUjian;
-            $data->thnkurikulum = $request->get('thnkurikulum');
-            $data->save();
+            $id = new PdBeasiswa;
+            if( is_null($id->first())){
+                $data = 0;
+            }else{
+                $data = $id->orderBy('idpdbeasiswa','desc')->first()->idpdbeasiswa;
+            }
+            $data_sv = new PdBeasiswa;
+            $data_sv->idpdbeasiswa = $data + 1;
+            $data_sv->jalurpenerimaan = $request->get('jalurpenerimaan');
+            $data_sv->sistemkuliah = $request->get('sistemkuliah');
+            $data_sv->periode = $request->get('periode');
+            $data_sv->pdpotongan = $request->get('pdpotongan');
+            $data_sv->save();
             return response()->json(
                 [
                     'status' => true,
@@ -58,7 +69,8 @@ class MsThnKurikulumController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(),[
-            'thnkurikulum' => 'required',
+            'batal' => 'required',
+            'periode' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -66,8 +78,11 @@ class MsThnKurikulumController extends Controller
         }
 
         try {
-            MsThnKurikulum::where('thnkurikulum',$id)->update([
-                'thnkurikulum' => $request->get('thnkurikulum'),
+            PdBeasiswa::where('idpdbeasiswa',$id)->update([
+                'jalurpenerimaan' => $request->get('jalurpenerimaan'),
+                'sistemkuliah' => $request->get('sistemkuliah'),
+                'periode' => $request->get('periode'),
+                'pdpotongan' => $request->get('pdpotongan'),
                 't_updateuser' => $request->get('user'),
                 't_updateip' => $request->ip(),
                 't_updatetime' => Carbon::now(),
@@ -89,7 +104,7 @@ class MsThnKurikulumController extends Controller
     public function delete($id)
     {
         try {
-            MsThnKurikulum::where('thnkurikulum',$id)->delete();
+            PdBeasiswa::where('idpdbeasiswa',$id)->delete();
             return response()->json(
                 [
                     'status' => true,

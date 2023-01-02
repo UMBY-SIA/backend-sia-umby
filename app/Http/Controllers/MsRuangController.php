@@ -38,12 +38,6 @@ class MsRuangController extends Controller
         }
 
         try {
-            $id = new MsRuang;
-            if( is_null($id->first())){
-                $data = 0;
-            }else{
-                $data = $id->orderBy('koderuang','desc')->first()->koderuang;
-            }
             $data = new MsRuang;
             $data->koderuang = $request->get('koderuang');
             $data->kodeunit = $request->get('kodeunit');
@@ -73,17 +67,8 @@ class MsRuangController extends Controller
 
     public function update(Request $request, $id)
     {
-        $validator = Validator::make($request->all(),[
-            'koderuang' => 'required',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['message' => $validator->errors()], Response::HTTP_FORBIDDEN);
-        }
-
         try {
             MsRuang::where('koderuang',$id)->update([
-                'koderuang' => $request->get('koderuang'),
                 'kodeunit' => $request->get('kodeunit'),
                 'kodegedung' => $request->get('kodegedung'),
                 'lantai' => $request->get('lantai'),

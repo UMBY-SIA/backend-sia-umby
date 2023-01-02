@@ -30,7 +30,6 @@ class MsSettingKrsUnitController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(),[
-            'idsetting' => 'required',
             'batal' => 'required',
             'periode' => 'required',
         ]);
@@ -46,15 +45,15 @@ class MsSettingKrsUnitController extends Controller
             }else{
                 $data = $id->orderBy('idsetting','desc')->first()->idsetting;
             }
-            $data = new MsSettingKrsUnit;
-            $data->idsetting = $request->get('idsetting');
-            $data->sistemkuliah = $request->get('sistemkuliah');
-            $data->kodeunit = $request->get('kodeunit');
-            $data->tglawalkrs = $request->get('tglawalkrs');
-            $data->tglakhirkrs = $request->get('tglakhirkrs');
-            $data->batal = $request->get('batal');
-            $data->periode = $request->get('periode');
-            $data->save();
+            $data_sv = new MsSettingKrsUnit;
+            $data_sv->idsetting = $data + 1;
+            $data_sv->sistemkuliah = $request->get('sistemkuliah');
+            $data_sv->kodeunit = $request->get('kodeunit');
+            $data_sv->tglawalkrs = $request->get('tglawalkrs');
+            $data_sv->tglakhirkrs = $request->get('tglakhirkrs');
+            $data_sv->batal = $request->get('batal');
+            $data_sv->periode = $request->get('periode');
+            $data_sv->save();
             return response()->json(
                 [
                     'status' => true,
@@ -71,7 +70,6 @@ class MsSettingKrsUnitController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(),[
-            'idsetting' => 'required',
             'batal' => 'required',
             'periode' => 'required',
         ]);
@@ -82,7 +80,6 @@ class MsSettingKrsUnitController extends Controller
 
         try {
             MsSettingKrsUnit::where('idsetting',$id)->update([
-                'idsetting' => $request->get('idsetting'),
                 'sistemkuliah' => $request->get('sistemkuliah'),
                 'kodeunit' => $request->get('kodeunit'),
                 'tglawalkrs' => $request->get('tglawalkrs'),
