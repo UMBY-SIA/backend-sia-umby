@@ -151,6 +151,52 @@ $router->group(['prefix' => 'v1'], function() use ($router)
         $router->delete('delete/{id}','MsRuangController@delete');
     });
 
+    $router->group(['prefix' => 'agama'],function() use ($router)
+    {
+        $router->get('/','LvAgamaController@index');
+        $router->post('posts','LvAgamaController@store');
+        $router->post('update/{id}','LvAgamaController@update');
+        $router->delete('delete/{id}','LvAgamaController@delete');
+    });
+
+    $router->group(['prefix' => 'akreditasi'],function() use ($router)
+    {
+        $router->get('/','LvAkreditasiController@index');
+        $router->post('posts','LvAkreditasiController@store');
+        $router->post('update/{id}','LvAkreditasiController@update');
+        $router->delete('delete/{id}','LvAkreditasiController@delete');
+    });
+
+    $router->group(['prefix' => 'frekuensi-kurikulum'],function() use ($router)
+    {
+        $router->get('/','LvFrekuensiKurikulumController@index');
+        $router->post('posts','LvFrekuensiKurikulumController@store');
+        $router->post('update/{id}','LvFrekuensiKurikulumController@update');
+        $router->delete('delete/{id}','LvFrekuensiKurikulumController@delete');
+    });
+
+    $router->group(['prefix' => 'beasiswa'],function() use ($router)
+    {
+        $router->get('/','PdBeasiswaController@index');
+        $router->post('posts','PdBeasiswaController@store');
+        $router->post('update/{id}','PdBeasiswaController@update');
+        $router->delete('delete/{id}','PdBeasiswaController@delete');
+    });
+
+    $router->group(['prefix' => 'biaya-studi'],function() use ($router)
+    {
+        $router->get('/','PdBiayaStudiController@index');
+        $router->post('posts','PdBiayaStudiController@store');
+        $router->post('update/{id}','PdBiayaStudiController@update');
+        $router->delete('delete/{id}','PdBiayaStudiController@delete');
+    });
+
+    $router->group(['prefix' => 'content'],function() use ($router)
+    {
+        $router->get('/','PdContentController@index');
+        $router->post('posts','PdContentController@store');
+        $router->post('update/{id}','PdContentController@update');
+        $router->delete('delete/{id}','PdContentController@delete');
     $router->group(['prefix' => 'pengalaman'],function() use ($router)
     {
         $router->get('/','MsPengalamanController@index');

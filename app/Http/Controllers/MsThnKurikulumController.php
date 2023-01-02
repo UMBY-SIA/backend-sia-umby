@@ -39,15 +39,9 @@ class MsThnKurikulumController extends Controller
         }
 
         try {
-            $id = new MsThnKurikulum;
-            if( is_null($id->first())){
-                $data = 0;
-            }else{
-                $data = $id->orderBy('thnkurikulum','desc')->first()->thnkurikulum;
-            }
-            $kurikulum = new MsThnKurikulum;
-            $kurikulum->thnkurikulum = $request->get('thnkurikulum');
-            $kurikulum->save();
+            $data = new MsSyaratKehadiranUjian;
+            $data->thnkurikulum = $request->get('thnkurikulum');
+            $data->save();
             return response()->json(
                 [
                     'status' => true,

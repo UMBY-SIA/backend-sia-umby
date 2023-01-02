@@ -30,7 +30,6 @@ class MsSettingUnitController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(),[
-            'idsetting' => 'required',
             'ulang' => 'required',
         ]);
 
@@ -45,21 +44,21 @@ class MsSettingUnitController extends Controller
             }else{
                 $data = $id->orderBy('idsetting','desc')->first()->idsetting;
             }
-            $data = new MsSettingUnit;
-            $data->idsetting = $request->get('idsetting');
-            $data->sistemkuliah = $request->get('sistemkuliah');
-            $data->kodeunit = $request->get('kodeunit');
-            $data->tglawalkrs = $request->get('tglawalkrs');
-            $data->tglakhirkrs = $request->get('tglakhirkrs');
-            $data->tglakhirnilaiuts = $request->get('tglakhirnilaiuts');
-            $data->tglakhirnilaiuas = $request->get('tglakhirnilaiuas');
-            $data->tglakhirnilaiutssusulan = $request->get('tglakhirnilaiutssusulan');
-            $data->tglakhirnilaiuassusulan = $request->get('tglakhirnilaiuassusulan');
-            $data->krsisdan = $request->get('krsisdan');
-            $data->isijadwaldosen = $request->get('isijadwaldosen');
-            $data->skslulus = $request->get('skslulus');
-            $data->ulang = $request->get('ulang');
-            $data->save();
+            $data_sv = new MsSettingUnit;
+            $data_sv->idsetting = $data + 1;
+            $data_sv->sistemkuliah = $request->get('sistemkuliah');
+            $data_sv->kodeunit = $request->get('kodeunit');
+            $data_sv->tglawalkrs = $request->get('tglawalkrs');
+            $data_sv->tglakhirkrs = $request->get('tglakhirkrs');
+            $data_sv->tglakhirnilaiuts = $request->get('tglakhirnilaiuts');
+            $data_sv->tglakhirnilaiuas = $request->get('tglakhirnilaiuas');
+            $data_sv->tglakhirnilaiutssusulan = $request->get('tglakhirnilaiutssusulan');
+            $data_sv->tglakhirnilaiuassusulan = $request->get('tglakhirnilaiuassusulan');
+            $data_sv->krsisdan = $request->get('krsisdan');
+            $data_sv->isijadwaldosen = $request->get('isijadwaldosen');
+            $data_sv->skslulus = $request->get('skslulus');
+            $data_sv->ulang = $request->get('ulang');
+            $data_sv->save();
             return response()->json(
                 [
                     'status' => true,
@@ -76,7 +75,6 @@ class MsSettingUnitController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(),[
-            'idsetting' => 'required',
             'ulang' => 'required',
         ]);
 
@@ -86,7 +84,6 @@ class MsSettingUnitController extends Controller
 
         try {
             MsSettingUnit::where('idsetting',$id)->update([
-                'idsetting' => $request->get('idsetting'),
                 'sistemkuliah' => $request->get('sistemkuliah'),
                 'kodeunit' => $request->get('kodeunit'),
                 'tglawalkrs' => $request->get('tglawalkrs'),

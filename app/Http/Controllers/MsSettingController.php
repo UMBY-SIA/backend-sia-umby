@@ -30,7 +30,6 @@ class MsSettingController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(),[
-            'idsetting' => 'required',
             'thnkurikulumsekarang' => 'required',
             'periodesekarang' => 'required',
             'batassksdefault' => 'required',
@@ -49,42 +48,42 @@ class MsSettingController extends Controller
             }else{
                 $data = $id->orderBy('idsetting','desc')->first()->idsetting;
             }
-            $data = new MsSetting;
-            $data->idsetting = $request->get('idsetting');
-            $data->thnkurikulumsekarang = $request->get('thnkurikulumsekarang');
-            $data->periodesekarang = $request->get('periodesekarang');
-            $data->batassksdefault = $request->get('batassksdefault');
-            $data->nangkatutup = $request->get('nangkatutup');
-            $data->periodenilai = $request->get('periodenilai');
-            $data->pesanpengesahan = $request->get('pesanpengesahan');
-            $data->lintaskurikulum = $request->get('lintaskurikulum');
-            $data->tglutsmulai = $request->get('tglutsmulai');
-            $data->tglutsakhir = $request->get('tglutsakhir');
-            $data->tgluasmulai = $request->get('tgluasmulai');
-            $data->tgluasakhir = $request->get('tgluasakhir');
-            $data->tglsusulanuasmulai = $request->get('tglsusulanuasmulai');
-            $data->tglsusulanuasakhir = $request->get('tglsusulanuasakhir');
-            $data->tglkuliahmulai = $request->get('tglkuliahmulai');
-            $data->tglkuliahakhir = $request->get('tglkuliahakhir');
-            $data->tglsusulanutsmulai = $request->get('tglsusulanutsmulai');
-            $data->tglsusulanutsakhir = $request->get('tglsusulanutsakhir');
-            $data->sistemkuliah = $request->get('sistemkuliah');
-            $data->syaratkehadiran = $request->get('syaratkehadiran');
-            $data->tglcutimulai = $request->get('tglcutimulai');
-            $data->tglcutiakhir = $request->get('tglcutiakhir');
-            $data->tglnilaiutsmulai = $request->get('tglnilaiutsmulai');
-            $data->tglnilaiutsakhir = $request->get('tglnilaiutsakhir');
-            $data->tglnilaiuasmulai = $request->get('tglnilaiuasmulai');
-            $data->tglnilaiuasakhir = $request->get('tglnilaiuasakhir');
-            $data->periodesp = $request->get('periodesp');
-            $data->periodekrsta = $request->get('periodekrsta');
-            $data->tglkoreksimulai = $request->get('tglkoreksimulai');
-            $data->tglkoreksiakhir = $request->get('tglkoreksiakhir');
-            $data->tgluploadsoalmulai = $request->get('tgluploadsoalmulai');
-            $data->tgluploadsoalakhir = $request->get('tgluploadsoalakhir');
-            $data->tgltransfermulai = $request->get('tgltransfermulai');
-            $data->tgltransferakhir = $request->get('tgltransferakhir');
-            $data->save();
+            $data_sv = new MsSetting;
+            $data_sv->idsetting = $data + 1;
+            $data_sv->thnkurikulumsekarang = $request->get('thnkurikulumsekarang');
+            $data_sv->periodesekarang = $request->get('periodesekarang');
+            $data_sv->batassksdefault = $request->get('batassksdefault');
+            $data_sv->nangkatutup = $request->get('nangkatutup');
+            $data_sv->periodenilai = $request->get('periodenilai');
+            $data_sv->pesanpengesahan = $request->get('pesanpengesahan');
+            $data_sv->lintaskurikulum = $request->get('lintaskurikulum');
+            $data_sv->tglutsmulai = $request->get('tglutsmulai');
+            $data_sv->tglutsakhir = $request->get('tglutsakhir');
+            $data_sv->tgluasmulai = $request->get('tgluasmulai');
+            $data_sv->tgluasakhir = $request->get('tgluasakhir');
+            $data_sv->tglsusulanuasmulai = $request->get('tglsusulanuasmulai');
+            $data_sv->tglsusulanuasakhir = $request->get('tglsusulanuasakhir');
+            $data_sv->tglkuliahmulai = $request->get('tglkuliahmulai');
+            $data_sv->tglkuliahakhir = $request->get('tglkuliahakhir');
+            $data_sv->tglsusulanutsmulai = $request->get('tglsusulanutsmulai');
+            $data_sv->tglsusulanutsakhir = $request->get('tglsusulanutsakhir');
+            $data_sv->sistemkuliah = $request->get('sistemkuliah');
+            $data_sv->syaratkehadiran = $request->get('syaratkehadiran');
+            $data_sv->tglcutimulai = $request->get('tglcutimulai');
+            $data_sv->tglcutiakhir = $request->get('tglcutiakhir');
+            $data_sv->tglnilaiutsmulai = $request->get('tglnilaiutsmulai');
+            $data_sv->tglnilaiutsakhir = $request->get('tglnilaiutsakhir');
+            $data_sv->tglnilaiuasmulai = $request->get('tglnilaiuasmulai');
+            $data_sv->tglnilaiuasakhir = $request->get('tglnilaiuasakhir');
+            $data_sv->periodesp = $request->get('periodesp');
+            $data_sv->periodekrsta = $request->get('periodekrsta');
+            $data_sv->tglkoreksimulai = $request->get('tglkoreksimulai');
+            $data_sv->tglkoreksiakhir = $request->get('tglkoreksiakhir');
+            $data_sv->tgluploadsoalmulai = $request->get('tgluploadsoalmulai');
+            $data_sv->tgluploadsoalakhir = $request->get('tgluploadsoalakhir');
+            $data_sv->tgltransfermulai = $request->get('tgltransfermulai');
+            $data_sv->tgltransferakhir = $request->get('tgltransferakhir');
+            $data_sv->save();
             return response()->json(
                 [
                     'status' => true,
@@ -101,7 +100,6 @@ class MsSettingController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(),[
-            'idsetting' => 'required',
             'thnkurikulumsekarang' => 'required',
             'periodesekarang' => 'required',
             'batassksdefault' => 'required',
@@ -115,7 +113,6 @@ class MsSettingController extends Controller
 
         try {
             MsSetting::where('idsetting',$id)->update([
-                'idsetting' => $request->get('idsetting'),
                 'thnkurikulumsekarang' => $request->get('thnkurikulumsekarang'),
                 'periodesekarang' => $request->get('periodesekarang'),
                 'batassksdefault' => $request->get('batassksdefault'),

@@ -2,22 +2,22 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\MsSettingKrsUnit;
+use App\Models\LvAkreditasi;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\QueryException;
-use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
-class MsSettingKrsUnitController extends Controller
+class LvAkreditasiController extends Controller
 {
     public function index()
     {
-        $data = new MsSettingKrsUnit;
+        $data = new LvAkreditasi;
         if (count($data->get()) > 0) {
             return response()->json([
                 'status' => true,
                 'message' => 'Berhasil menampilkan data',
-                'data' => $data->all(),
+                'data' => $data->paginate(10),
             ], Response::HTTP_OK);
         }else{
             return response()->json([
@@ -30,8 +30,7 @@ class MsSettingKrsUnitController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(),[
-            'batal' => 'required',
-            'periode' => 'required',
+            'kodeakreditasi' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -39,21 +38,11 @@ class MsSettingKrsUnitController extends Controller
         }
 
         try {
-            $id = new MsSettingKrsUnit;
-            if( is_null($id->first())){
-                $data = 0;
-            }else{
-                $data = $id->orderBy('idsetting','desc')->first()->idsetting;
-            }
-            $data_sv = new MsSettingKrsUnit;
-            $data_sv->idsetting = $data + 1;
-            $data_sv->sistemkuliah = $request->get('sistemkuliah');
-            $data_sv->kodeunit = $request->get('kodeunit');
-            $data_sv->tglawalkrs = $request->get('tglawalkrs');
-            $data_sv->tglakhirkrs = $request->get('tglakhirkrs');
-            $data_sv->batal = $request->get('batal');
-            $data_sv->periode = $request->get('periode');
-            $data_sv->save();
+            $data = new LvAkreditasi;
+            $data->kodeakreditasi = $request->get('kodeakreditasi');
+            $data->keterangansem = $request->get('keterangansem');
+            $data->keterangansemen = $request->get('keterangansemen');
+            $data->save();
             return response()->json(
                 [
                     'status' => true,
@@ -69,26 +58,10 @@ class MsSettingKrsUnitController extends Controller
 
     public function update(Request $request, $id)
     {
-        $validator = Validator::make($request->all(),[
-            'batal' => 'required',
-            'periode' => 'required',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['message' => $validator->errors()], Response::HTTP_FORBIDDEN);
-        }
-
         try {
-            MsSettingKrsUnit::where('idsetting',$id)->update([
-                'sistemkuliah' => $request->get('sistemkuliah'),
-                'kodeunit' => $request->get('kodeunit'),
-                'tglawalkrs' => $request->get('tglawalkrs'),
-                'tglakhirkrs' => $request->get('tglakhirkrs'),
-                'batal' => $request->get('batal'),
-                'periode' => $request->get('periode'),
-                't_updateuser' => $request->get('user'),
-                't_updateip' => $request->ip(),
-                't_updatetime' => Carbon::now(),
+            LvAkreditasi::where('kodeakreditasi',$id)->update([
+                'keterangansem' => $request->get('keterangansem'),
+                'keterangansemen' => $request->get('keterangansemen'),
             ]);
 
             return response()->json(
@@ -107,7 +80,7 @@ class MsSettingKrsUnitController extends Controller
     public function delete($id)
     {
         try {
-            MsSettingKrsUnit::where('idsetting',$id)->delete();
+            LvAkreditasi::where('kodeakreditasi',$id)->delete();
             return response()->json(
                 [
                     'status' => true,

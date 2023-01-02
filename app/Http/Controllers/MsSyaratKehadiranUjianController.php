@@ -39,12 +39,6 @@ class MsSyaratKehadiranUjianController extends Controller
         }
 
         try {
-            $id = new MsSyaratKehadiranUjian;
-            if( is_null($id->first())){
-                $data = 0;
-            }else{
-                $data = $id->orderBy('kodesyarat','desc')->first()->kodesyarat;
-            }
             $data = new MsSyaratKehadiranUjian;
             $data->kodesyarat = $request->get('kodesyarat');
             $data->namasyarat = $request->get('namasyarat');
@@ -65,17 +59,8 @@ class MsSyaratKehadiranUjianController extends Controller
 
     public function update(Request $request, $id)
     {
-        $validator = Validator::make($request->all(),[
-            'kodesyarat' => 'required',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['message' => $validator->errors()], Response::HTTP_FORBIDDEN);
-        }
-
         try {
             MsSyaratKehadiranUjian::where('kodesyarat',$id)->update([
-                'kodesyarat' => $request->get('kodesyarat'),
                 'namasyarat' => $request->get('namasyarat'),
                 'minimal' => $request->get('minimal'),
             ]);
