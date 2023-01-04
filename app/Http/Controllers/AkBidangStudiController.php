@@ -43,8 +43,14 @@ class AkBidangStudiController extends Controller
         }
 
         try {
-            $id = IdGenerator::generate(['table' => 'ak_bidangstudi','field' => 'kodebs','length' => 5, 'prefix' =>date('m')]);
-
+            // $id = IdGenerator::generate(['table' => 'ak_bidangstudi','field' => 'kodebs','length' => 5, 'prefix' =>0]);
+            $last_id = AkBidangStudi::orderBy('kodebs','DESC')->get();
+            if (count($last_id) > 0) {
+                $bilangan = AkBidangStudi::orderBy('kodebs','DESC')->first()->kodebs + 1;
+                $id = sprintf("%02d", $bilangan);
+            }else{
+                $id = '01';
+            }
             $bidangStudi = new AkBidangStudi;
             $bidangStudi->kodebs = $id;
             $bidangStudi->kodeunit = $request->get('kodeunit');
