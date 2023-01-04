@@ -1,19 +1,19 @@
 <?php
 namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
-use App\Models\LvJabatan;
+use App\Models\LvJabatanAkademik;
 use Exception;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Validator;
+use Symfony\Component\HttpFoundation\Response;
 
-class LvJabatanController extends Controller
+class LvJabatanAkademikController extends Controller
 {
     public function index()
     {
-        $data = new LvJabatan;
+        $data = new LvJabatanAkademik;
         if (count($data->get()) > 0) {
             return response()->json([
                 'status' => true,
@@ -31,7 +31,7 @@ class LvJabatanController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(),[
-            'namajabatan' => 'required|max:50'
+            'namajabakademik' => 'required|max:100'
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -39,11 +39,11 @@ class LvJabatanController extends Controller
                 'message' => $validator->errors()], Response::HTTP_FORBIDDEN);
         }
         try {
-            $id = IdGenerator::generate(['table' => 'lv_jabatan','field' => 'kodejabatan','length' => 10, 'prefix' =>date('m')]);
-            $lvJabatan = new LvJabatan;
-            $lvJabatan->kodejabatan = $id;
-            $lvJabatan->namajabatan = $request->get('namajabatan');
-            $lvJabatan->save();
+            $id = IdGenerator::generate(['table' => 'lv_jabatanakademik','field' => 'jabakademik','length' => 10, 'prefix' =>'JA'.date('m')]);
+            $lvJabatanAkademik = new LvJabatanAkademik;
+            $lvJabatanAkademik->jabakademik = $id;
+            $lvJabatanAkademik->namajabakademik = $request->get('namajabakademik');
+            $lvJabatanAkademik->save();
             return response()->json(
                 [
                     'status' => true,
@@ -58,7 +58,7 @@ class LvJabatanController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(),[
-            'namajabatan' => 'required|max:50',
+            'namajabakademik' => 'required|max:50',
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -66,8 +66,8 @@ class LvJabatanController extends Controller
                 'message' => $validator->errors()], Response::HTTP_FORBIDDEN);
         }
         try {
-            LvJabatan::where('kodejabatan',$id)->update([
-                'namajabatan' => $request->get('namajabatan'),
+            LvJabatanAkademik::where('jabakademik',$id)->update([
+                'namajabakademik' => $request->get('namajabakademik'),
             ]);
             return response()->json(
                 [
@@ -84,7 +84,7 @@ class LvJabatanController extends Controller
     public function delete($id)
     {
         try {
-            LvJabatan::where('kodejabatan',$id)->delete();
+            LvJabatanAkademik::where('jabakademik',$id)->delete();
             return response()->json(
                 [
                     'status' => true,

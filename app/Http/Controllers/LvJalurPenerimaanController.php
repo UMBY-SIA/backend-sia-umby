@@ -1,19 +1,20 @@
 <?php
 namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
-use App\Models\LvJabatan;
+use App\Models\LvJalurPenerimaan;
+use Carbon\Carbon;
 use Exception;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Validator;
+use Symfony\Component\HttpFoundation\Response;
 
-class LvJabatanController extends Controller
+class LvJalurPenerimaanController extends Controller
 {
     public function index()
     {
-        $data = new LvJabatan;
+        $data = new LvJalurPenerimaan;
         if (count($data->get()) > 0) {
             return response()->json([
                 'status' => true,
@@ -31,49 +32,64 @@ class LvJabatanController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(),[
-            'namajabatan' => 'required|max:50'
+            'namajalur' => 'required',
+            'keterangan' => 'required',
+            'kodejenisjalur' => 'required',
         ]);
+
         if ($validator->fails()) {
-            return response()->json([
-                'status' => false,
-                'message' => $validator->errors()], Response::HTTP_FORBIDDEN);
+            return response()->json(['message' => $validator->errors()], Response::HTTP_FORBIDDEN);
         }
+
         try {
-            $id = IdGenerator::generate(['table' => 'lv_jabatan','field' => 'kodejabatan','length' => 10, 'prefix' =>date('m')]);
-            $lvJabatan = new LvJabatan;
-            $lvJabatan->kodejabatan = $id;
-            $lvJabatan->namajabatan = $request->get('namajabatan');
-            $lvJabatan->save();
+            $id = IdGenerator::generate(['table' => 'lv_jalurpenerimaan','field' => 'jalurpenerimaan','length' => 5, 'prefix' =>'JP'.date('m')]);
+            $LvJalurPenerimaan = new LvJalurPenerimaan;
+            $LvJalurPenerimaan->jalurpenerimaan = $id;
+            $LvJalurPenerimaan->namajalur = $request->get('namajalur');
+            $LvJalurPenerimaan->keterangan = $request->get('keterangan');
+            $LvJalurPenerimaan->kodejenisjalur = $request->get('kodejenisjalur');
+            $LvJalurPenerimaan->save();
             return response()->json(
                 [
                     'status' => true,
                     'message' => 'Berhasil menambahkan data',
                 ],Response::HTTP_OK);
+
         } catch (Exception $th) {
             return response()->json(['status' => false, 'message' => $th->getMessage()]);
         } catch (QueryException $e){
             return response()->json(['status' => false, 'message' => $e->getMessage()]);
         }
     }
+
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(),[
-            'namajabatan' => 'required|max:50',
+            'namajalur' => 'required',
+            'keterangan' => 'required',
+            'kodejenisjalur' => 'required',
         ]);
+
         if ($validator->fails()) {
-            return response()->json([
-                'status' => false,
-                'message' => $validator->errors()], Response::HTTP_FORBIDDEN);
+            return response()->json(['message' => $validator->errors()], Response::HTTP_FORBIDDEN);
         }
+
         try {
-            LvJabatan::where('kodejabatan',$id)->update([
-                'namajabatan' => $request->get('namajabatan'),
+            LvJalurPenerimaan::where('jalurpenerimaan',$id)->update([
+                'namajalur' => $request->get('namajalur'),
+                'keterangan' => $request->get('keterangan'),
+                'kodejenisjalur' => $request->get('kodejenisjalur'),
+                't_updateuser' => $request->get('user'),
+                't_updateip' => $request->ip(),
+                't_updatetime' => Carbon::now(),
             ]);
+
             return response()->json(
                 [
                     'status' => true,
                     'message' => 'Berhasil mengganti data',
                 ],Response::HTTP_OK);
+
         } catch (Exception $th) {
             return response()->json(['status' => false, 'message' => $th->getMessage()]);
         } catch (QueryException $e){
@@ -84,12 +100,13 @@ class LvJabatanController extends Controller
     public function delete($id)
     {
         try {
-            LvJabatan::where('kodejabatan',$id)->delete();
+            LvJalurPenerimaan::where('jalurpenerimaan',$id)->delete();
             return response()->json(
                 [
                     'status' => true,
                     'message' => 'Berhasil menghapus data',
                 ],Response::HTTP_OK);
+
         } catch (Exception $th) {
             return response()->json(['status' => false, 'message' => $th->getMessage()]);
         } catch (QueryException $e){

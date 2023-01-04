@@ -294,5 +294,38 @@ $router->group(['prefix' => 'v1'], function() use ($router)
         $router->delete('delete/{id}','MsMahasiswaController@delete');
     });
 
+    $router->group(['prefix' => 'jabatan-akademik'],function() use ($router)
+    {
+        $router->get('/','LvJabatanAkademikController@index');
+        $router->post('posts','LvJabatanAkademikController@store');
+        $router->post('update/{id}','LvJabatanAkademikController@update');
+        $router->delete('delete/{id}','LvJabatanAkademikController@delete');
+    });
+
+    $router->group(['prefix' => 'jabatan-struktural'],function() use ($router)
+    {
+        $router->get('/','LvJabatanStrukturalController@index');
+        $router->post('posts','LvJabatanStrukturalController@store');
+        $router->post('update/{id}','LvJabatanStrukturalController@update');
+        $router->delete('delete/{id}','LvJabatanStrukturalController@delete');
+    });
+
+    $router->group(['prefix' => 'jalur-penerimaan'],function() use ($router)
+    {
+        $router->get('/','LvJalurPenerimaanController@index');
+        $router->post('posts','LvJalurPenerimaanController@store');
+        $router->post('update/{id}','LvJalurPenerimaanController@update');
+        $router->delete('delete/{id}','LvJalurPenerimaanController@delete');
+    });
+
+    $router->group(['prefix' => 'pmb-jenis-jalur'],function() use ($router)
+    {
+        $router->get('/','lvPmbJenisJalurController@index');
+        $router->post('posts','lvPmbJenisJalurController@store');
+        $router->post('update/{id}','lvPmbJenisJalurController@update');
+        $router->delete('delete/{id}','lvPmbJenisJalurController@delete');
+    });
+
+
 });
 $router->get('mahasiswa', 'AturanCutiController@index');
