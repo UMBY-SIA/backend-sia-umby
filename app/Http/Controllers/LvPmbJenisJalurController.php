@@ -1,21 +1,21 @@
 <?php
 namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
-use App\Models\AkBidangStudi;
-use App\Models\MsJabatan;
+use App\Models\LvJalurPenerimaan;
+use App\Models\LvPmbJenisJalur;
 use Carbon\Carbon;
 use Exception;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Validator;
+use Symfony\Component\HttpFoundation\Response;
 
-class AkBidangStudiController extends Controller
+class LvPmbJenisJalurController extends Controller
 {
     public function index()
     {
-        $data = new AkBidangStudi;
+        $data = new LvPmbJenisJalur;
         if (count($data->get()) > 0) {
             return response()->json([
                 'status' => true,
@@ -33,9 +33,7 @@ class AkBidangStudiController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(),[
-            'kodeunit' => 'required',
-            'namabs' => 'required',
-            'namabsen' => 'required',
+            'jenisjalur' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -43,20 +41,11 @@ class AkBidangStudiController extends Controller
         }
 
         try {
-            // $id = IdGenerator::generate(['table' => 'ak_bidangstudi','field' => 'kodebs','length' => 5, 'prefix' =>0]);
-            $last_id = AkBidangStudi::orderBy('kodebs','DESC')->get();
-            if (count($last_id) > 0) {
-                $bilangan = AkBidangStudi::orderBy('kodebs','DESC')->first()->kodebs + 1;
-                $id = sprintf("%02d", $bilangan);
-            }else{
-                $id = '01';
-            }
-            $bidangStudi = new AkBidangStudi;
-            $bidangStudi->kodebs = $id;
-            $bidangStudi->kodeunit = $request->get('kodeunit');
-            $bidangStudi->namabs = $request->get('namabs');
-            $bidangStudi->namabsen = $request->get('namabsen');
-            $bidangStudi->save();
+            $id = IdGenerator::generate(['table' => 'lv_pmbjenisjalur','field' => 'kodejenisjalur','length' => 3, 'prefix' => 0]);
+            $LvPmbJenisJalur = new LvPmbJenisJalur;
+            $LvPmbJenisJalur->kodejenisjalur = $id;
+            $LvPmbJenisJalur->jenisjalur = $request->get('jenisjalur');
+            $LvPmbJenisJalur->save();
             return response()->json(
                 [
                     'status' => true,
@@ -73,9 +62,7 @@ class AkBidangStudiController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(),[
-            'kodeunit' => 'required',
-            'namabs' => 'required',
-            'namabsen' => 'required',
+            'jenisjalur' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -83,9 +70,8 @@ class AkBidangStudiController extends Controller
         }
 
         try {
-            AkBidangStudi::where('kodebs',$id)->update([
-                'namabs' => $request->get('namabs'),
-                'namabsen' => $request->get('namabsen'),
+            LvPmbJenisJalur::where('kodejenisjalur',$id)->update([
+                'jenisjalur' => $request->get('jenisjalur'),
                 't_updateuser' => $request->get('user'),
                 't_updateip' => $request->ip(),
                 't_updatetime' => Carbon::now(),
@@ -107,7 +93,7 @@ class AkBidangStudiController extends Controller
     public function delete($id)
     {
         try {
-            AkBidangStudi::where('kodebs',$id)->delete();
+            LvPmbJenisJalur::where('kodejenisjalur',$id)->delete();
             return response()->json(
                 [
                     'status' => true,
