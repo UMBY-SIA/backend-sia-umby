@@ -2,17 +2,17 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\LvAkreditasi;
+use App\Models\PdLibrary;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
-class LvAkreditasiController extends Controller
+class PdLibraryController extends Controller
 {
     public function index()
     {
-        $data = new LvAkreditasi;
+        $data = new PdLibrary;
         if (count($data->get()) > 0) {
             return response()->json([
                 'status' => true,
@@ -30,7 +30,8 @@ class LvAkreditasiController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(),[
-            'kodeakreditasi' => 'required',
+            'kodelibrary' => 'required',
+            'namafile' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -38,11 +39,19 @@ class LvAkreditasiController extends Controller
         }
 
         try {
-            $data = new LvAkreditasi;
-            $data->kodeakreditasi = $request->get('kodeakreditasi');
-            $data->keterangansem = $request->get('keterangansem');
-            $data->keterangansemen = $request->get('keterangansemen');
-            $data->save();
+            $data_sv = new PdLibrary;
+            $data_sv->kodelibrary = $request->get('kodelibrary');
+            $data_sv->url = $request->get('url');
+            $data_sv->sistemkuliah = $request->get('sistemkuliah');
+
+            if($request->file('namafile')){
+                $file_upload    = $request->file('namafile');
+                $fileName       = 'library-' . uniqid() . '.' . $file_upload->getClientOriginalExtension();
+                $file_upload->move(public_path('/file/'), $fileName);
+                $data_sv->namafile = $fileName;
+                $data_sv->filetype = $file_upload->getClientOriginalExtension();
+            }
+            $data_sv->save();
             return response()->json(
                 [
                     'status' => true,
@@ -58,11 +67,39 @@ class LvAkreditasiController extends Controller
 
     public function update(Request $request, $id)
     {
+        $validator = Validator::make($request->all(),[
+            'namafile' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['message' => $validator->errors()], Response::HTTP_FORBIDDEN);
+        }
+
         try {
-            LvAkreditasi::where('kodeakreditasi',$id)->update([
-                'keterangansem' => $request->get('keterangansem'),
-                'keterangansemen' => $request->get('keterangansemen'),
-            ]);
+            if($request->file('namafile')){
+                $file_upload    = $request->file('namafile');
+                $fileName       = 'library-' . uniqid() . '.' . $file_upload->getClientOriginalExtension();
+                $file_upload->move(public_path('/file/'), $fileName);
+
+                PdLibrary::where('kodelibrary',$id)->update([
+                    'url' => $request->get('url'),
+                    'sistemkuliah' => $request->get('sistemkuliah'),
+                    'namafile' => $fileName,
+                    'filetype' => $file_upload->getClientOriginalExtension(),
+                    't_updateuser' => $request->get('user'),
+                    't_updateip' => $request->ip(),
+                    't_updatetime' => Carbon::now(),
+                ]);
+            }else{
+                PdLibrary::where('kodelibrary',$id)->update([
+                    'url' => $request->get('url'),
+                    'sistemkuliah' => $request->get('sistemkuliah'),
+                    't_updateuser' => $request->get('user'),
+                    't_updateip' => $request->ip(),
+                    't_updatetime' => Carbon::now(),
+                ]);
+            }
+            
 
             return response()->json(
                 [
@@ -80,7 +117,7 @@ class LvAkreditasiController extends Controller
     public function delete($id)
     {
         try {
-            LvAkreditasi::where('kodeakreditasi',$id)->delete();
+            PdLibrary::where('kodelibrary',$id)->delete();
             return response()->json(
                 [
                     'status' => true,

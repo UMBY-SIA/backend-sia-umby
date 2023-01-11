@@ -2,17 +2,17 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\LvAkreditasi;
+use App\Models\PdNilaiMinimal;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
-class LvAkreditasiController extends Controller
+class PdNilaiMinimalController extends Controller
 {
     public function index()
     {
-        $data = new LvAkreditasi;
+        $data = new PdNilaiMinimal;
         if (count($data->get()) > 0) {
             return response()->json([
                 'status' => true,
@@ -29,20 +29,14 @@ class LvAkreditasiController extends Controller
 
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(),[
-            'kodeakreditasi' => 'required',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['message' => $validator->errors()], Response::HTTP_FORBIDDEN);
-        }
-
         try {
-            $data = new LvAkreditasi;
-            $data->kodeakreditasi = $request->get('kodeakreditasi');
-            $data->keterangansem = $request->get('keterangansem');
-            $data->keterangansemen = $request->get('keterangansemen');
-            $data->save();
+
+            $data_sv = new PdNilaiMinimal;
+            $data_sv->kodenilaiminimal = $request->get('kodenilaiminimal');
+            $data_sv->sistemkuliah = $request->get('sistemkuliah');
+            $data_sv->periodedaftar = $request->get('periodedaftar');
+            $data_sv->nilaiminimun = $request->get('nilaiminimun');
+            $data_sv->save();
             return response()->json(
                 [
                     'status' => true,
@@ -59,9 +53,13 @@ class LvAkreditasiController extends Controller
     public function update(Request $request, $id)
     {
         try {
-            LvAkreditasi::where('kodeakreditasi',$id)->update([
-                'keterangansem' => $request->get('keterangansem'),
-                'keterangansemen' => $request->get('keterangansemen'),
+            PdNilaiMinimal::where('kodenilaiminimal',$id)->update([
+                'sistemkuliah' => $request->get('sistemkuliah'),
+                'periodedaftar' => $request->get('periodedaftar'),
+                'nilaiminimun' => $request->get('nilaiminimun'),
+                't_updateuser' => $request->get('user'),
+                't_updateip' => $request->ip(),
+                't_updatetime' => Carbon::now(),
             ]);
 
             return response()->json(
@@ -80,7 +78,7 @@ class LvAkreditasiController extends Controller
     public function delete($id)
     {
         try {
-            LvAkreditasi::where('kodeakreditasi',$id)->delete();
+            PdNilaiMinimal::where('kodenilaiminimal',$id)->delete();
             return response()->json(
                 [
                     'status' => true,

@@ -17,7 +17,7 @@ class PdGelombangDaftarController extends Controller
             return response()->json([
                 'status' => true,
                 'message' => 'Berhasil menampilkan data',
-                'data' => $data->paginate(10),
+                'data' => $data->all(),
             ], Response::HTTP_OK);
         }else{
             return response()->json([
@@ -44,14 +44,35 @@ class PdGelombangDaftarController extends Controller
             if( is_null($id->first())){
                 $data = 0;
             }else{
-                $data = $id->orderBy('idsetting','desc')->first()->idsetting;
+                $data = $id->orderBy('idgelombang','desc')->first()->idgelombang;
             }
+
             $data_sv = new PdGelombangDaftar;
             $data_sv->idgelombang = $data + 1;
             $data_sv->jalurpenerimaan = $request->get('jalurpenerimaan');
             $data_sv->kodegelombang = $request->get('kodegelombang');
             $data_sv->periodedaftar = $request->get('periodedaftar');
             $data_sv->pengumuman = $request->get('pengumuman');
+            $data_sv->tglawaldaftar = $request->get('tglawaldaftar');
+            $data_sv->tglakhirdaftar = $request->get('tglakhirdaftar');
+            $data_sv->tglujian = $request->get('tglujian');
+            $data_sv->tglpengumuman = $request->get('tglpengumuman');
+            $data_sv->tglawalregistrasi = $request->get('tglawalregistrasi');
+            $data_sv->tglakhirregistrasi = $request->get('tglakhirregistrasi');
+            $data_sv->sistemkuliah = $request->get('sistemkuliah');
+            $data_sv->aktif = $request->get('aktif');
+            $data_sv->kodefrm = $request->get('kodefrm');
+            $data_sv->tambahpangkal = $request->get('tambahpangkal');
+            $data_sv->gelombang = $request->get('gelombang');
+            $data_sv->programpend = $request->get('programpend');
+
+            if($request->file('file_upload')){
+                $file_upload    = $request->file('file_upload');
+                $fileName       = 'biaya-' . uniqid() . '.' . $file_upload->getClientOriginalExtension();
+                $file_upload->move(public_path('/file/'), $fileName);
+                $data_sv->filebiaya = $fileName;
+            }
+            
             $data_sv->save();
             return response()->json(
                 [
@@ -69,7 +90,9 @@ class PdGelombangDaftarController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(),[
-            'menu' => 'required',
+            'jalurpenerimaan' => 'required',
+            'kodegelombang' => 'required',
+            'periodedaftar' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -77,15 +100,56 @@ class PdGelombangDaftarController extends Controller
         }
 
         try {
-            PdGelombangDaftar::where('kodecontent',$id)->update([
-                'menu' => $request->get('menu'),
-                'sistemkuliah' => $request->get('sistemkuliah'),
-                'judul' => $request->get('judul'),
-                'isi' => $request->get('isi'),
-                't_updateuser' => $request->get('user'),
-                't_updateip' => $request->ip(),
-                't_updatetime' => Carbon::now(),
-            ]);
+            if($request->file('file_upload')){
+                $file_upload    = $request->file('file_upload');
+                $fileName       = 'biaya-' . uniqid() . '.' . $file_upload->getClientOriginalExtension();
+                $file_upload->move(public_path('/file/'), $fileName);
+
+                PdGelombangDaftar::where('idgelombang',$id)->update([
+                    'jalurpenerimaan' => $request->get('jalurpenerimaan'),
+                    'kodegelombang' => $request->get('kodegelombang'),
+                    'periodedaftar' => $request->get('periodedaftar'),
+                    'pengumuman' => $request->get('pengumuman'),
+                    'tglawaldaftar' => $request->get('tglawaldaftar'),
+                    'tglakhirdaftar' => $request->get('tglakhirdaftar'),
+                    'tglujian' => $request->get('tglujian'),
+                    'tglpengumuman' => $request->get('tglpengumuman'),
+                    'tglawalregistrasi' => $request->get('tglawalregistrasi'),
+                    'tglakhirregistrasi' => $request->get('tglakhirregistrasi'),
+                    'sistemkuliah' => $request->get('sistemkuliah'),
+                    'aktif' => $request->get('aktif'),
+                    'kodefrm' => $request->get('kodefrm'),
+                    'tambahpangkal' => $request->get('tambahpangkal'),
+                    'gelombang' => $request->get('gelombang'),
+                    'programpend' => $request->get('programpend'),
+                    'filebiaya' => $fileName,
+                    't_updateuser' => $request->get('user'),
+                    't_updateip' => $request->ip(),
+                    't_updatetime' => Carbon::now(),
+                ]);
+            }else{
+                PdGelombangDaftar::where('idgelombang',$id)->update([
+                    'jalurpenerimaan' => $request->get('jalurpenerimaan'),
+                    'kodegelombang' => $request->get('kodegelombang'),
+                    'periodedaftar' => $request->get('periodedaftar'),
+                    'pengumuman' => $request->get('pengumuman'),
+                    'tglawaldaftar' => $request->get('tglawaldaftar'),
+                    'tglakhirdaftar' => $request->get('tglakhirdaftar'),
+                    'tglujian' => $request->get('tglujian'),
+                    'tglpengumuman' => $request->get('tglpengumuman'),
+                    'tglawalregistrasi' => $request->get('tglawalregistrasi'),
+                    'tglakhirregistrasi' => $request->get('tglakhirregistrasi'),
+                    'sistemkuliah' => $request->get('sistemkuliah'),
+                    'aktif' => $request->get('aktif'),
+                    'kodefrm' => $request->get('kodefrm'),
+                    'tambahpangkal' => $request->get('tambahpangkal'),
+                    'gelombang' => $request->get('gelombang'),
+                    'programpend' => $request->get('programpend'),
+                    't_updateuser' => $request->get('user'),
+                    't_updateip' => $request->ip(),
+                    't_updatetime' => Carbon::now(),
+                ]);
+            }
 
             return response()->json(
                 [
@@ -103,7 +167,7 @@ class PdGelombangDaftarController extends Controller
     public function delete($id)
     {
         try {
-            PdGelombangDaftar::where('kodecontent',$id)->delete();
+            PdGelombangDaftar::where('idgelombang',$id)->delete();
             return response()->json(
                 [
                     'status' => true,

@@ -2,17 +2,17 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\LvAkreditasi;
+use App\Models\PdInformasiDari;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
-class LvAkreditasiController extends Controller
+class PdInformasiDariController extends Controller
 {
     public function index()
     {
-        $data = new LvAkreditasi;
+        $data = new PdInformasiDari;
         if (count($data->get()) > 0) {
             return response()->json([
                 'status' => true,
@@ -30,7 +30,7 @@ class LvAkreditasiController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(),[
-            'kodeakreditasi' => 'required',
+            'informasidari' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -38,11 +38,17 @@ class LvAkreditasiController extends Controller
         }
 
         try {
-            $data = new LvAkreditasi;
-            $data->kodeakreditasi = $request->get('kodeakreditasi');
-            $data->keterangansem = $request->get('keterangansem');
-            $data->keterangansemen = $request->get('keterangansemen');
-            $data->save();
+            $id = new PdGelombangDaftar;
+            if( is_null($id->first())){
+                $data = 0;
+            }else{
+                $data = $id->orderBy('kodeinformasi','desc')->first()->kodeinformasi;
+            }
+
+            $data_sv = new PdInformasiDari;
+            $data_sv->kodeinformasi = $data + 1;
+            $data_sv->informasidari = $request->get('informasidari');
+            $data_sv->save();
             return response()->json(
                 [
                     'status' => true,
@@ -58,10 +64,17 @@ class LvAkreditasiController extends Controller
 
     public function update(Request $request, $id)
     {
+        $validator = Validator::make($request->all(),[
+            'informasidari' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['message' => $validator->errors()], Response::HTTP_FORBIDDEN);
+        }
+
         try {
-            LvAkreditasi::where('kodeakreditasi',$id)->update([
-                'keterangansem' => $request->get('keterangansem'),
-                'keterangansemen' => $request->get('keterangansemen'),
+            PdInformasiDari::where('kodeinformasi',$id)->update([
+                'informasidari' => $request->get('informasidari'),
             ]);
 
             return response()->json(
@@ -80,7 +93,7 @@ class LvAkreditasiController extends Controller
     public function delete($id)
     {
         try {
-            LvAkreditasi::where('kodeakreditasi',$id)->delete();
+            PdInformasiDari::where('kodeinformasi',$id)->delete();
             return response()->json(
                 [
                     'status' => true,

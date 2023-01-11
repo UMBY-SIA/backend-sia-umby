@@ -175,29 +175,6 @@ $router->group(['prefix' => 'v1'], function() use ($router)
         $router->delete('delete/{id}','LvFrekuensiKurikulumController@delete');
     });
 
-    $router->group(['prefix' => 'beasiswa'],function() use ($router)
-    {
-        $router->get('/','PdBeasiswaController@index');
-        $router->post('posts','PdBeasiswaController@store');
-        $router->post('update/{id}','PdBeasiswaController@update');
-        $router->delete('delete/{id}','PdBeasiswaController@delete');
-    });
-
-    $router->group(['prefix' => 'biaya-studi'],function() use ($router)
-    {
-        $router->get('/','PdBiayaStudiController@index');
-        $router->post('posts','PdBiayaStudiController@store');
-        $router->post('update/{id}','PdBiayaStudiController@update');
-        $router->delete('delete/{id}','PdBiayaStudiController@delete');
-    });
-
-    $router->group(['prefix' => 'content'],function() use ($router)
-    {
-        $router->get('/','PdContentController@index');
-        $router->post('posts','PdContentController@store');
-        $router->post('update/{id}','PdContentController@update');
-        $router->delete('delete/{id}','PdContentController@delete');
-    });
     $router->group(['prefix' => 'pengalaman'],function() use ($router)
     {
         $router->get('/','MsPengalamanController@index');
@@ -292,6 +269,94 @@ $router->group(['prefix' => 'v1'], function() use ($router)
         $router->post('posts','MsMahasiswaController@store');
         $router->post('update/{id}','MsMahasiswaController@update');
         $router->delete('delete/{id}','MsMahasiswaController@delete');
+    });
+
+    $router->group(['prefix' => 'beasiswa'],function() use ($router)
+    {
+        $router->get('/','PdBeasiswaController@index');
+        $router->post('posts','PdBeasiswaController@store');
+        $router->post('update/{id}','PdBeasiswaController@update');
+        $router->delete('delete/{id}','PdBeasiswaController@delete');
+    });
+
+    $router->group(['prefix' => 'biaya-studi'],function() use ($router)
+    {
+        $router->get('/','PdBiayaStudiController@index');
+        $router->post('posts','PdBiayaStudiController@store');
+        $router->post('update/{id}','PdBiayaStudiController@update');
+        $router->delete('delete/{id}','PdBiayaStudiController@delete');
+    });
+
+    $router->group(['prefix' => 'content'],function() use ($router)
+    {
+        $router->get('/','PdContentController@index');
+        $router->post('posts','PdContentController@store');
+        $router->post('update/{id}','PdContentController@update');
+        $router->delete('delete/{id}','PdContentController@delete');
+    });
+
+    $router->group(['prefix' => 'gelombang-daftar'],function() use ($router)
+    {
+        $router->get('/','PdGelombangDaftarController@index');
+        $router->post('posts','PdGelombangDaftarController@store');
+        $router->post('update/{id}','PdGelombangDaftarController@update');
+        $router->delete('delete/{id}','PdGelombangDaftarController@delete');
+    });
+
+    $router->group(['prefix' => 'informasi-dari'],function() use ($router)
+    {
+        $router->get('/','PdInformasiDariController@index');
+        $router->post('posts','PdInformasiDariController@store');
+        $router->post('update/{id}','PdInformasiDariController@update');
+        $router->delete('delete/{id}','PdInformasiDariController@delete');
+    });
+
+    $router->group(['prefix' => 'library'],function() use ($router)
+    {
+        $router->get('/','PdLibraryController@index');
+        $router->post('posts','PdLibraryController@store');
+        $router->post('update/{id}','PdLibraryController@update');
+        $router->delete('delete/{id}','PdLibraryController@delete');
+    });
+
+    $router->group(['prefix' => 'nilai-minimal'],function() use ($router)
+    {
+        $router->get('/','PdNilaiMinimalController@index');
+        $router->post('posts','PdNilaiMinimalController@store');
+        $router->post('update/{id}','PdNilaiMinimalController@update');
+        $router->delete('delete/{id}','PdNilaiMinimalController@delete');
+    });
+
+    $router->group(['prefix' => 'nilai-ujian'],function() use ($router)
+    {
+        $router->get('/','PdNilaiUjianController@index');
+        $router->post('posts','PdNilaiUjianController@store');
+        $router->post('update/{id}','PdNilaiUjianController@update');
+        $router->delete('delete/{id}','PdNilaiUjianController@delete');
+    });
+
+    $router->group(['prefix' => 'nomor-kategori'],function() use ($router)
+    {
+        $router->get('/','PdNomorKategoriController@index');
+        $router->post('posts','PdNomorKategoriController@store');
+        $router->post('update/{id}','PdNomorKategoriController@update');
+        $router->delete('delete/{id}','PdNomorKategoriController@delete');
+    });
+
+    $router->group(['prefix' => 'pagu-jalur'],function() use ($router)
+    {
+        $router->get('/','PdPaguJalurController@index');
+        $router->post('posts','PdPaguJalurController@store');
+        $router->post('update/{id}','PdPaguJalurController@update');
+        $router->delete('delete/{id}','PdPaguJalurController@delete');
+    });
+
+    $router->group(['prefix' => 'pagu-unit'],function() use ($router)
+    {
+        $router->get('/','PdPaguUnitController@index');
+        $router->post('posts','PdPaguUnitController@store');
+        $router->post('update/{id}','PdPaguUnitController@update');
+        $router->delete('delete/{id}','PdPaguUnitController@delete');
     });
 
 });

@@ -2,17 +2,17 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\LvAkreditasi;
+use App\Models\PdPaguJalur;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
-class LvAkreditasiController extends Controller
+class PdPaguJalurController extends Controller
 {
     public function index()
     {
-        $data = new LvAkreditasi;
+        $data = new PdPaguJalur;
         if (count($data->get()) > 0) {
             return response()->json([
                 'status' => true,
@@ -29,20 +29,14 @@ class LvAkreditasiController extends Controller
 
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(),[
-            'kodeakreditasi' => 'required',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['message' => $validator->errors()], Response::HTTP_FORBIDDEN);
-        }
-
         try {
-            $data = new LvAkreditasi;
-            $data->kodeakreditasi = $request->get('kodeakreditasi');
-            $data->keterangansem = $request->get('keterangansem');
-            $data->keterangansemen = $request->get('keterangansemen');
-            $data->save();
+
+            $data_sv = new PdPaguJalur;
+            $data_sv->jalurpenerimaan = $request->get('jalurpenerimaan');
+            $data_sv->kodeunit = $request->get('kodeunit');
+            $data_sv->periodedaftar = $request->get('periodedaftar');
+            $data_sv->pagujalur = $request->get('pagujalur');
+            $data_sv->save();
             return response()->json(
                 [
                     'status' => true,
@@ -59,9 +53,10 @@ class LvAkreditasiController extends Controller
     public function update(Request $request, $id)
     {
         try {
-            LvAkreditasi::where('kodeakreditasi',$id)->update([
-                'keterangansem' => $request->get('keterangansem'),
-                'keterangansemen' => $request->get('keterangansemen'),
+            PdPaguJalur::where('jalurpenerimaan',$id)->update([
+                'kodeunit' => $request->get('kodeunit'),
+                'periodedaftar' => $request->get('periodedaftar'),
+                'pagujalur' => $request->get('pagujalur'),
             ]);
 
             return response()->json(
@@ -80,7 +75,7 @@ class LvAkreditasiController extends Controller
     public function delete($id)
     {
         try {
-            LvAkreditasi::where('kodeakreditasi',$id)->delete();
+            PdPaguJalur::where('jalurpenerimaan',$id)->delete();
             return response()->json(
                 [
                     'status' => true,

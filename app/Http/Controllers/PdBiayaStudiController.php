@@ -17,7 +17,7 @@ class PdBiayaStudiController extends Controller
             return response()->json([
                 'status' => true,
                 'message' => 'Berhasil menampilkan data',
-                'data' => $data->paginate(10),
+                'data' => $data->all(),
             ], Response::HTTP_OK);
         }else{
             return response()->json([
