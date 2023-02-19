@@ -390,6 +390,7 @@ $router->group(['prefix' => 'v1'], function() use ($router)
         $router->delete('delete/{id}','lvPmbJenisJalurController@delete');
     });
 
-
+    // rekap status mahasiswa
+    $router->get('rekap-status-mahasiswa','RekapStatusMahasiswaController@index');
 });
 $router->get('mahasiswa', 'AturanCutiController@index');

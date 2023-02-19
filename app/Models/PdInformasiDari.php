@@ -12,4 +12,9 @@ class PdInformasiDari extends Model
         'kodeinformasi',
         'informasidari',
     ];
+
+    public function testqw()
+    {
+
+    }
 }
