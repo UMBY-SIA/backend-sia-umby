@@ -390,6 +390,18 @@ $router->group(['prefix' => 'v1'], function() use ($router)
         $router->delete('delete/{id}','lvPmbJenisJalurController@delete');
     });
 
+    $router->group(['prefix' => 'jenis-mata-kuliah'],function() use ($router)
+    {
+        $router->get('/','LvJenisMataKuliahController@index');
+        $router->post('posts','LvJenisMataKuliahController@store');
+        $router->post('update/{id}','LvJenisMataKuliahController@update');
+        $router->get('show/{id}','LvJenisMataKuliahController@show');
+        $router->delete('delete/{id}','LvJenisMataKuliahController@delete');
+
+    });
+
+
+
 
 });
 $router->get('mahasiswa', 'AturanCutiController@index');

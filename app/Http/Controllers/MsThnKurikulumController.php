@@ -39,7 +39,7 @@ class MsThnKurikulumController extends Controller
         }
 
         try {
-            $data = new MsSyaratKehadiranUjian;
+            $data = new MsThnKurikulum;
             $data->thnkurikulum = $request->get('thnkurikulum');
             $data->save();
             return response()->json(
