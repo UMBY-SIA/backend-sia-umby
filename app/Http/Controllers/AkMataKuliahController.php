@@ -8,7 +8,7 @@ class AkMataKuliahController extends Controller
     public function index()
     {
         $data = AkMataKuliah::get();
-        if (isset($data)) {
+        if (!isset($data)) {
             return response()->json([
                 'status' => false,
                 'message' => 'Tidak ada data.',

@@ -5,6 +5,7 @@ use App\Models\LvJenisMataKuliah;
 use Exception;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -13,7 +14,7 @@ class LvJenisMataKuliahController extends Controller
     public function index()
     {
         $data = LvJenisMataKuliah::get();
-        if (isset($data)) {
+        if (!isset($data)) {
             return response()->json([
                 'status' => false,
                 'message' => 'Tidak ada data.',
