@@ -397,8 +397,17 @@ $router->group(['prefix' => 'v1'], function() use ($router)
         $router->post('update/{id}','LvJenisMataKuliahController@update');
         $router->get('show/{id}','LvJenisMataKuliahController@show');
         $router->delete('delete/{id}','LvJenisMataKuliahController@delete');
-
     });
+    $router->group(['prefix' => 'mata-kuliah'],function() use ($router)
+    {
+        $router->get('/','AkMataKuliahController@index');
+        $router->post('posts','AkMataKuliahController@store');
+        $router->get('show','AkMataKuliahController@show');
+        $router->post('update/{id}','AkMataKuliahController@update');
+        $router->delete('delete/{id}','AkMataKuliahController@delete');
+    });
+
+
 
 
 

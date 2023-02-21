@@ -51,7 +51,7 @@ class LvJenisMataKuliahController extends Controller
             return response()->json([
                 'status' => true,
                 'message' => 'Berhasil menambahkan data.',
-            ]);
+            ],Response::HTTP_OK);
         } catch (Exception $e) {
             return response()->json(['status' => false, 'message' => $e->getMessage()]);
         } catch (QueryException $e){
@@ -68,11 +68,11 @@ class LvJenisMataKuliahController extends Controller
                 'status' => true,
                 'message' => 'Berhasil mendapatkan data.',
                 'data' => $data,
-            ]);
+            ],Response::HTTP_OK);
         } catch (Exception $e) {
-            return response()->json(['status' => false, 'message' => $e->getMessage()]);
+            return response()->json(['status' => false, 'message' => $e->getMessage()],Response::HTTP_BAD_REQUEST);
         } catch (QueryException $e){
-            return response()->json(['status' => false, 'message' => $e->getMessage()]);
+            return response()->json(['status' => false, 'message' => $e->getMessage()],Response::HTTP_BAD_REQUEST);
         }
     }
 
@@ -100,11 +100,11 @@ class LvJenisMataKuliahController extends Controller
             return response()->json([
                 'status' => true,
                 'message' => 'Berhasil mengganti data.',
-            ]);
+            ],Response::HTTP_OK);
         } catch (Exception $e) {
-            return response()->json(['status' => false, 'message' => $e->getMessage()]);
+            return response()->json(['status' => false, 'message' => $e->getMessage()],Response::HTTP_BAD_REQUEST);
         } catch (QueryException $e){
-            return response()->json(['status' => false, 'message' => $e->getMessage()]);
+            return response()->json(['status' => false, 'message' => $e->getMessage()],Response::HTTP_BAD_REQUEST);
         }
     }
 
@@ -119,9 +119,9 @@ class LvJenisMataKuliahController extends Controller
                 ],Response::HTTP_OK);
 
         } catch (Exception $th) {
-            return response()->json(['status' => false, 'message' => $th->getMessage()]);
+            return response()->json(['status' => false, 'message' => $th->getMessage()],Response::HTTP_BAD_REQUEST);
         } catch (QueryException $e){
-            return response()->json(['status' => false, 'message' => $e->getMessage()]);
+            return response()->json(['status' => false, 'message' => $e->getMessage()],Response::HTTP_BAD_REQUEST);
         }
     }
 
