@@ -96,6 +96,69 @@ class AkMataKuliahController extends Controller
 
     public function update(Request $request)
     {
+        $validator = Validator::make($request->all(),[
+            'kodemk' => 'required',
+            'sks' => 'required',
+            'tipekuliah' => 'required'
 
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['message' => $validator->errors()], Response::HTTP_FORBIDDEN);
+
+        };
+        try {
+            AkMataKuliah::where('kodemk',$request->get('idmk'))->update([
+                'kodemk' => $request->get('kodemk'),
+                'nip' => $request->get('nip'),
+                'kodejenis' => $request->get('kodejenis'),
+                'namamk' => $request->get('namamk'),
+                'namamken' => $request->get('namamken'),
+                'sks' => $request->get('sks'),
+                'nilaimin' => $request->get('nilaimin'),
+                'abstrakmk' => $request->get('abstrakmk'),
+                'sksmk' => $request->get('sksmk'),
+                'skstatapmuka' => $request->get('skstatapmuka'),
+                'skspraktikum' => $request->get('skspraktikum'),
+                'sksprakteklapangan' => $request->get('sksprakteklapangan'),
+                'sap' => $request->get('sap'),
+                'silabus' => $request->get('silabus'),
+                'bahanajar' => $request->get('bahanajar'),
+                'diktat' => $request->get('diktat'),
+                'tglmulaiefektif' => $request->get('tglmulaiefektif') != '' ? $request->get('tglmulaiefektif') : null,
+                'tglakhirefektif' =>$request->get('tglakhirefektif') != '' ? $request->get('tglakhirefektif') : null,
+                'tipekuliah' => $request->get('tipekuliah'),
+                'skslulusmin' => $request->get('skslulusmin'),
+                'filesapmk' => $request->get('filesapmk'),
+                't_updateuser' => $request->get('t_updateuser'),
+                't_updateip' => $request->ip(),
+                't_updatetime' => Carbon::now(),
+                't_updateact' => $request->get('t_updateact'),
+            ]);
+            return response()->json([
+                'status' => true,
+                'message' => 'Berhasil mengganti data.',
+            ],Response::HTTP_OK);
+        } catch (Exception $e) {
+            return response()->json(['status' => false, 'message' => $e->getMessage()],Response::HTTP_BAD_REQUEST);
+        } catch (QueryException $e) {
+            return response()->json(['status' => false, 'message' => $e->getMessage()],Response::HTTP_BAD_REQUEST);
+        }
+    }
+
+    public function delete(Request $request)
+    {
+        try {
+            AkMataKuliah::where('kodemk',$request->get('idmk'))->delete();
+            return response()->json(
+                [
+                    'status' => true,
+                    'message' => 'Berhasil menghapus data',
+                ],Response::HTTP_OK);
+
+        } catch (Exception $th) {
+            return response()->json(['status' => false, 'message' => $th->getMessage()],Response::HTTP_BAD_REQUEST);
+        } catch (QueryException $e){
+            return response()->json(['status' => false, 'message' => $e->getMessage()],Response::HTTP_BAD_REQUEST);
+        }
     }
 }

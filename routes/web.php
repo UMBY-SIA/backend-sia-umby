@@ -403,8 +403,8 @@ $router->group(['prefix' => 'v1'], function() use ($router)
         $router->get('/','AkMataKuliahController@index');
         $router->post('posts','AkMataKuliahController@store');
         $router->get('show','AkMataKuliahController@show');
-        $router->post('update/{id}','AkMataKuliahController@update');
-        $router->delete('delete/{id}','AkMataKuliahController@delete');
+        $router->post('update','AkMataKuliahController@update');
+        $router->delete('delete','AkMataKuliahController@delete');
     });
 
 
