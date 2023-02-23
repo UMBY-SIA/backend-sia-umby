@@ -390,7 +390,32 @@ $router->group(['prefix' => 'v1'], function() use ($router)
         $router->delete('delete/{id}','lvPmbJenisJalurController@delete');
     });
 
-    // rekap status mahasiswa
-    $router->get('rekap-status-mahasiswa','RekapStatusMahasiswaController@index');
+    $router->group(['prefix' => 'jenis-mata-kuliah'],function() use ($router)
+    {
+        $router->get('/','LvJenisMataKuliahController@index');
+        $router->post('posts','LvJenisMataKuliahController@store');
+        $router->post('update/{id}','LvJenisMataKuliahController@update');
+        $router->get('show/{id}','LvJenisMataKuliahController@show');
+        $router->delete('delete/{id}','LvJenisMataKuliahController@delete');
+    });
+    $router->group(['prefix' => 'mata-kuliah'],function() use ($router)
+    {
+        $router->get('/','AkMataKuliahController@index');
+        $router->post('posts','AkMataKuliahController@store');
+        $router->get('show','AkMataKuliahController@show');
+        $router->post('update','AkMataKuliahController@update');
+        $router->delete('delete','AkMataKuliahController@delete');
+    });
+
+    $router->group(['prefix' => 'sap'],function() use ($router)
+    {
+        $router->get('/','SAPController@index');
+    });
+
+
+
+
+
+
 });
 $router->get('mahasiswa', 'AturanCutiController@index');
