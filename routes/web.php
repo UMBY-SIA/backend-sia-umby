@@ -407,6 +407,11 @@ $router->group(['prefix' => 'v1'], function() use ($router)
         $router->delete('delete','AkMataKuliahController@delete');
     });
 
+    $router->group(['prefix' => 'sap'],function() use ($router)
+    {
+        $router->get('/','SAPController@index');
+    });
+
 
 
 

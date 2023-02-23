@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMsUnitTable extends Migration
+class CreateGateSettingTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class CreateMsUnitTable extends Migration
      */
     public function up()
     {
-        Schema::create('ms_unit', function (Blueprint $table) {
-            $table->bigInteger('kodeunit')->primary();
-            $table->string('namaunit')->nullable();
+        Schema::create('gate.gate_setting', function (Blueprint $table) {
+            $table->char('idsetting');
+            $table->text('nilai')->nullable();
             $table->timestamps();
         });
     }
@@ -27,6 +27,6 @@ class CreateMsUnitTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ms_unit');
+        Schema::dropIfExists('gate_setting');
     }
 }
