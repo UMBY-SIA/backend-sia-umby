@@ -19,14 +19,85 @@ class MsUnitController extends Controller
             return response()->json([
                 'status' => true,
                 'message' => 'Berhasil menampilkan data',
-                'data' => $data->all(),
+                'data' => $data->get(),
             ], Response::HTTP_OK);
+            // return $data->get();
         }else{
             return response()->json([
                 'status' => false,
                 'message' => 'Tidak ada data',
             ], Response::HTTP_BAD_REQUEST);
         }
+    }
+
+    public function getUnit($kodeunitparent)
+    {
+        $model = (new MsUnit)->newQuery();
+        if (!$kodeunitparent){
+            // $data = new MsUnit;
+            $data = $model->wherenull('kodeunit')
+                        ->whereNotnull('namaunit')
+                        ->orderBy('urutan')
+                        ->orderBy('namaunit');
+        }else{
+            // $data = new MsUnit;
+            $data = $model->where('kodeunit',$kodeunitparent)
+                        ->whereNotnull('namaunit')
+                        ->orderBy('urutan')
+                        ->orderBy('namaunit');
+        }
+        
+        $dataGet = array();
+        foreach ($data->get() as $post) {
+            $parentId = $post['kodeunit'];
+            $parentLv = $post['levels'];
+            $nestedData['value'] = $post['kodeunit'];
+            $nestedData['text'] = $post['namaunit'];
+            $nestedData['lvl'] = $post['levels'];
+            $dataGet[] = $nestedData;
+
+            $model = (new MsUnit)->newQuery();
+            $data_ = $model->where('kodeunitparent',$parentId)
+                        ->whereNotnull('namaunit')
+                        ->where('levels','>',$parentLv)
+                        ->orderBy('urutan')
+                        ->orderBy('namaunit')->get();
+            foreach ($data_ as $post_) {
+                $parentId_ = $post_['kodeunit'];
+                $nestedData['value'] = $post_['kodeunit'];
+                $nestedData['text'] = "- ".$post_['namaunit'];
+                $nestedData['lvl'] = $post['levels'];
+                $dataGet[] = $nestedData;
+
+                $model = (new MsUnit)->newQuery();
+                $data__ = $model->where('kodeunitparent',$parentId_)
+                            ->whereNotnull('namaunit')
+                            // ->where('levels','>',$parentLv)
+                            ->orderBy('urutan')
+                            ->orderBy('namaunit')->get();
+                foreach ($data__ as $post__) {
+                    $nestedData['value'] = $post__['kodeunit'];
+                    $nestedData['text'] = "- - ".$post__['programpend'].' '.$post__['namaunit'];
+                    $nestedData['lvl'] = $post['levels'];
+                    $dataGet[] = $nestedData;
+                }
+            }
+            
+        }
+        return response()->json(['data' => $dataGet]);
+        // if (count($data->get()) > 0) {
+        //     return response()->json([
+        //         'status' => true,
+        //         'message' => 'Berhasil menampilkan data',
+        //         'data' => $data->get(),
+        //     ], Response::HTTP_OK);
+        //     // return $data->get();
+        // }else{
+        //     return response()->json([
+        //         'status' => false,
+        //         'message' => 'Tidak ada data',
+        //     ], Response::HTTP_BAD_REQUEST);
+        // }
     }
 
     public function store(Request $request)

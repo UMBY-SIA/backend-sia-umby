@@ -18,7 +18,7 @@ class LvAgamaController extends Controller
             return response()->json([
                 'status' => true,
                 'message' => 'Berhasil menampilkan data',
-                'data' => $data->all(),
+                'data' => $data->get(),
             ], Response::HTTP_OK);
         }else{
             return response()->json([
