@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMsUnitTable extends Migration
+class CreateScSistemkuliahTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,10 @@ class CreateMsUnitTable extends Migration
      */
     public function up()
     {
-        Schema::create('ms_unit', function (Blueprint $table) {
-            $table->bigInteger('kodeunit')->primary();
-            $table->string('namaunit')->nullable();
+        Schema::create('gate.sc_sistemkuliah', function (Blueprint $table) {
+            $table->char('sistemkuliah');
+            $table->primary('sistemkuliah');
+            $table->string('namasistem',30);
             $table->timestamps();
         });
     }
@@ -27,6 +28,6 @@ class CreateMsUnitTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ms_unit');
+        Schema::dropIfExists('sc_sistemkuliah');
     }
 }
